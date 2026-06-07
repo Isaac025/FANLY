@@ -113,10 +113,24 @@ const Navbar = () => {
                     </button>
 
                     <button
-                      onClick={() => navigate("/bookings")}
+                      onClick={() => navigate("/my-bookings")}
                       className="w-full text-left py-2 hover:text-blue-600"
                     >
                       My Bookings
+                    </button>
+
+                    <button
+                      onClick={() => navigate("/my-donations")}
+                      className="w-full text-left py-2 hover:text-blue-600"
+                    >
+                      My Donations
+                    </button>
+
+                    <button
+                      onClick={() => navigate("/my-vip-memberships")}
+                      className="w-full text-left py-2 hover:text-blue-600"
+                    >
+                      My VIP Memberships
                     </button>
 
                     <button
@@ -177,9 +191,23 @@ const Navbar = () => {
 
               <li
                 className="hover:text-blue-600 cursor-pointer"
-                onClick={() => navigate("/bookings")}
+                onClick={() => navigate("/my-bookings")}
               >
                 My Bookings
+              </li>
+
+              <li
+                onClick={() => navigate("/my-donations")}
+                className="w-full text-left py-2 hover:text-blue-600"
+              >
+                My Donations
+              </li>
+
+              <li
+                onClick={() => navigate("/my-vip-memberships")}
+                className="w-full text-left py-2 hover:text-blue-600"
+              >
+                My VIP Memberships
               </li>
 
               <li

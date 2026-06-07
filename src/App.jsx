@@ -19,6 +19,10 @@ import AdminCelebrities from "./admin/AdminCelebrities";
 import AdminBookings from "./admin/AdminBookings";
 import AdminDonations from "./admin/AdminDonations";
 import AdminVipMemberships from "./admin/AdminVipMemberships";
+import UserBookings from "./pages/UserBookings";
+import UserDonations from "./pages/UserDonations";
+import UserVipMemberships from "./pages/UserVipMemberships";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -36,6 +40,42 @@ function App() {
             element={
               <ProtectedRoute>
                 <Booking />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/my-bookings"
+            element={
+              <ProtectedRoute>
+                <UserBookings />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/my-donations"
+            element={
+              <ProtectedRoute>
+                <UserDonations />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/my-vip-memberships"
+            element={
+              <ProtectedRoute>
+                <UserVipMemberships />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
               </ProtectedRoute>
             }
           />

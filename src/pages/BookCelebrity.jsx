@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 export default function BookCelebrity() {
   const navigate = useNavigate();
   const [celebrities, setCelebrities] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchCelebrities = async () => {
@@ -16,6 +17,8 @@ export default function BookCelebrity() {
         setCelebrities(data.data || []);
       } catch (error) {
         toast.error(error.message || "Could not load celebrities");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -52,45 +55,59 @@ export default function BookCelebrity() {
       </section>
 
       <div className="celebs-grid">
-        {celebrities.map((celebrity) => (
-          <div className="celeb-card" key={celebrity._id}>
-            <img src={celebrity.image || featured} alt={celebrity.name} />
-
-            {celebrity.isFeatured && <span className="badge">Featured</span>}
-
-            <div className="card-meta">
-              <div>
-                <h3>{celebrity.name}</h3>
-                <small>{celebrity.title || "Celebrity"}</small>
+        {loading
+          ? Array.from({ length: 6 }).map((_, index) => (
+              <div
+                key={index}
+                className="bg-white rounded-lg shadow-md p-4 animate-pulse"
+              >
+                <div className="h-6 w-20 bg-gray-200 rounded mb-3"></div>
+                <div className="h-72 bg-gray-200 rounded-md mb-3"></div>
+                <div className="h-5 w-32 bg-gray-200 rounded mb-2"></div>
+                <div className="h-4 w-20 bg-gray-200 rounded"></div>
               </div>
+            ))
+          : celebrities.map((celebrity) => (
+              <div className="celeb-card" key={celebrity._id}>
+                <img src={celebrity.image || featured} alt={celebrity.name} />
 
-              <span>⭐ 4.9</span>
-            </div>
+                {celebrity.isFeatured && (
+                  <span className="badge">Featured</span>
+                )}
 
-            <div className="card-actions">
-              <button
-                className="primary cursor-pointer"
-                onClick={() => goToPage("/booking", celebrity)}
-              >
-                Book now
-              </button>
+                <div className="card-meta">
+                  <div>
+                    <h3>{celebrity.name}</h3>
+                    <small>{celebrity.title || "Celebrity"}</small>
+                  </div>
 
-              <button
-                onClick={() => goToPage("/donation", celebrity)}
-                className="outline cursor-pointer"
-              >
-                Donate
-              </button>
-            </div>
+                  <span>⭐ 4.9</span>
+                </div>
 
-            <button
-              onClick={() => goToPage("/vip-membership", celebrity)}
-              className="cursor-pointer text-center border-[0.5px] border-[#5576B0] w-full mt-4 rounded-md"
-            >
-              Fan Card
-            </button>
-          </div>
-        ))}
+                <div className="card-actions">
+                  <button
+                    className="primary cursor-pointer"
+                    onClick={() => goToPage("/booking", celebrity)}
+                  >
+                    Book now
+                  </button>
+
+                  <button
+                    onClick={() => goToPage("/donation", celebrity)}
+                    className="outline cursor-pointer"
+                  >
+                    Donate
+                  </button>
+                </div>
+
+                <button
+                  onClick={() => goToPage("/vip-membership", celebrity)}
+                  className="cursor-pointer text-center border-[0.5px] border-[#5576B0] w-full mt-4 rounded-md"
+                >
+                  Fan Card
+                </button>
+              </div>
+            ))}
       </div>
 
       <HelpCTA booking />
