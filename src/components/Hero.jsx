@@ -56,7 +56,7 @@ const Hero = () => {
           </button> */}
           <button
             onClick={() => navigate("/book-celebrity")}
-            className="border border-blue-700 w-50 lg:w-70 cursor-pointer rounded-[15px] h-12.5 text-blue-700  font-medium hover:bg-blue-700 hover:text-white transition"
+            className="border border-blue-700 w-70 cursor-pointer rounded-[15px] h-12.5 text-blue-700  font-medium hover:bg-blue-700 hover:text-white transition"
           >
             Book Now or Browse categories
           </button>
