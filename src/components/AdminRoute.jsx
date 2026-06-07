@@ -6,7 +6,7 @@ export default function AdminRoute({ children }) {
   const { user, isLoggedIn } = useAppContext();
 
   if (!isLoggedIn) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/admin/login" replace />;
   }
 
   if (user?.role !== "admin") {

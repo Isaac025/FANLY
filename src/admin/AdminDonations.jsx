@@ -29,6 +29,19 @@ export default function AdminDonations() {
     }
   };
 
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "paid":
+        return "bg-green-100 text-green-700";
+      case "completed":
+        return "bg-blue-100 text-blue-700";
+      case "cancelled":
+        return "bg-red-100 text-red-700";
+      default:
+        return "bg-yellow-100 text-yellow-700";
+    }
+  };
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">Donations</h1>
@@ -77,7 +90,9 @@ export default function AdminDonations() {
                       onChange={(e) =>
                         updateStatus(donation._id, e.target.value)
                       }
-                      className="border rounded px-3 py-2"
+                      className={`border rounded px-3 py-2 ${getStatusClass(
+                        donation.status,
+                      )}`}
                     >
                       <option value="pending">Pending</option>
                       <option value="paid">Paid</option>

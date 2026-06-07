@@ -1,9 +1,12 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { HeroBlock, FormHeader, HelpCTA, PageFooter } from "./BookingShared";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function CryptoPayment() {
   const { state } = useLocation();
+  const navigate = useNavigate();
 
   const booking = state?.booking;
   const celebrity = state?.celebrity;
@@ -87,14 +90,35 @@ export default function CryptoPayment() {
 
               <button
                 type="button"
-                onClick={() => navigator.clipboard.writeText(cryptoAddress)}
+                onClick={() => {
+                  navigator.clipboard.writeText(cryptoAddress);
+                  toast.success("Wallet address copied");
+                }}
               >
                 Copy
               </button>
             </div>
           </div>
 
-          <button className="primary crypto-pay-btn" type="button">
+          <button
+            className="primary crypto-pay-btn"
+            type="button"
+            onClick={() =>
+              navigate("/payment-confirmation", {
+                state: {
+                  celebrity,
+                  booking,
+                  donation: state?.donation,
+                  membership: state?.membership,
+                  type,
+                  amount,
+                  serviceFee,
+                  total,
+                  cryptoAddress,
+                },
+              })
+            }
+          >
             Proceed to pay →
           </button>
         </div>

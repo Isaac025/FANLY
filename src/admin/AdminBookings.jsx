@@ -30,6 +30,19 @@ export default function AdminBookings() {
     }
   };
 
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "paid":
+        return "bg-green-100 text-green-700";
+      case "completed":
+        return "bg-blue-100 text-blue-700";
+      case "cancelled":
+        return "bg-red-100 text-red-700";
+      default:
+        return "bg-yellow-100 text-yellow-700";
+    }
+  };
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">Bookings</h1>
@@ -76,7 +89,9 @@ export default function AdminBookings() {
                       onChange={(e) =>
                         updateStatus(booking._id, e.target.value)
                       }
-                      className="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-sm"
+                      className={`px-3 py-1 rounded-full  text-sm ${getStatusClass(
+                        booking.status,
+                      )}`}
                     >
                       <option value="pending">Pending</option>
 

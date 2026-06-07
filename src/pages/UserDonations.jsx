@@ -20,6 +20,19 @@ export default function UserDonations() {
     fetchDonations();
   }, []);
 
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "paid":
+        return "bg-green-100 text-green-700";
+      case "completed":
+        return "bg-blue-100 text-blue-700";
+      case "cancelled":
+        return "bg-red-100 text-red-700";
+      default:
+        return "bg-yellow-100 text-yellow-700";
+    }
+  };
+
   return (
     <div className="page-shell">
       <Navbar />
@@ -46,7 +59,11 @@ export default function UserDonations() {
                     <p className="text-gray-500">{donation.charity}</p>
                   </div>
 
-                  <span className="px-4 py-1 rounded-full bg-yellow-100 text-yellow-700 h-fit capitalize">
+                  <span
+                    className={`px-4 py-1 rounded-full h-fit capitalize ${getStatusClass(
+                      donation.status,
+                    )}`}
+                  >
                     {donation.status}
                   </span>
                 </div>

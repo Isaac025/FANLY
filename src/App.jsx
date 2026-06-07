@@ -23,6 +23,8 @@ import UserBookings from "./pages/UserBookings";
 import UserDonations from "./pages/UserDonations";
 import UserVipMemberships from "./pages/UserVipMemberships";
 import Profile from "./pages/Profile";
+import AdminLogin from "./admin/AdminLogin";
+import PaymentConfirmation from "./pages/PaymentConfirmation";
 
 function App() {
   return (
@@ -97,6 +99,18 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/payment-confirmation"
+            element={
+              <ProtectedRoute>
+                <PaymentConfirmation />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route path="/admin/login" element={<AdminLogin />} />
+
           <Route
             path="/admin"
             element={

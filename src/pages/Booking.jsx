@@ -240,7 +240,12 @@ export default function Booking() {
                   <option>1 hour</option>
                   <option>2 hours</option>
                   <option>3 hours</option>
-                  <option>Full day</option>
+                  <option>4 hours</option>
+                  <option>5 hours</option>
+                  <option>10 hours</option>
+                  <option>12 hours</option>
+                  <option>15 hours</option>
+                  <option>Full day(24hours)</option>
                 </select>
               </div>
             </div>
@@ -330,8 +335,6 @@ export default function Booking() {
                 onChange={handleChange}
               >
                 <option value="">Choose a payment method</option>
-                <option value="card">Card Payment</option>
-                <option value="bank">Bank Transfer</option>
                 <option value="crypto">Crypto Payment</option>
               </select>
             </div>

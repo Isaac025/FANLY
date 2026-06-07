@@ -272,8 +272,6 @@ export default function Donation() {
                 onChange={handleChange}
               >
                 <option value="">Choose a payment method</option>
-                <option value="card">Card Payment</option>
-                <option value="bank">Bank Transfer</option>
                 <option value="crypto">Crypto Payment</option>
               </select>
             </div>
