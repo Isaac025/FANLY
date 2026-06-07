@@ -1,7 +1,10 @@
 import React from "react";
 import { FaThumbsUp, FaHeart, FaMousePointer } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="relative flex flex-col items-center justify-center min-h-screen bg-linear-to-b from-white to-blue-200 overflow-hidden text-center px-6">
       {/* Floating Icons */}
@@ -48,11 +51,14 @@ const Hero = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12">
-          <button className="bg-[#1D4996] text-white w-50 rounded-[15px] h-12.5  font-medium hover:bg-blue-800 transition">
-            Book Now
-          </button>
-          <button className="border border-blue-700 w-50 rounded-[15px] h-12.5 text-blue-700  font-medium hover:bg-blue-700 hover:text-white transition">
-            Browse categories
+          {/* <button className="bg-[#1D4996] text-white w-50 rounded-[15px] h-12.5  font-medium hover:bg-blue-800 transition">
+           
+          </button> */}
+          <button
+            onClick={() => navigate("/book-celebrity")}
+            className="border border-blue-700 w-50 lg:w-70 cursor-pointer rounded-[15px] h-12.5 text-blue-700  font-medium hover:bg-blue-700 hover:text-white transition"
+          >
+            Book Now or Browse categories
           </button>
         </div>
 

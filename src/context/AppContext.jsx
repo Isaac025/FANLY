@@ -6,8 +6,19 @@ const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : null;
+    try {
+      const savedUser = localStorage.getItem("user");
+
+      if (!savedUser || savedUser === "undefined" || savedUser === "null") {
+        return null;
+      }
+
+      return JSON.parse(savedUser);
+    } catch (error) {
+      localStorage.removeItem("user");
+      localStorage.removeItem("lnq_token");
+      return null;
+    }
   });
   const [celebrities, setCelebrities] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -22,6 +33,7 @@ export const AppProvider = ({ children }) => {
     } catch {
       setUser(null);
       localStorage.removeItem("lnq_token");
+      localStorage.removeItem("user");
     }
   };
 
