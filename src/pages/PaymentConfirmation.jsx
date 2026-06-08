@@ -17,7 +17,9 @@ export default function PaymentConfirmation() {
 
   const total = Number(state?.total || state?.amount || 0);
   const cryptoAddress =
-    state?.cryptoAddress || "0xA7B9cD12Ef34567890aBCdEf1234567890ABcDEF";
+    state?.cryptoAddress || "bc1qu57er6n853w95glt0z6sugx728uddc8yca76pn";
+
+  const totalBTC = Number(state?.totalBTC || 0);
 
   const title =
     type === "booking"
@@ -63,8 +65,8 @@ export default function PaymentConfirmation() {
             </div>
 
             <div className="flex justify-between border-b py-3">
-              <span>Total Amount</span>
-              <b>${total.toLocaleString()}</b>
+              <span>BTC Amount</span>
+              <b>{totalBTC ? `${totalBTC.toFixed(6)} BTC` : "Pending rate"}</b>
             </div>
 
             <div className="py-3">

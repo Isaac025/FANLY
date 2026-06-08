@@ -4,24 +4,24 @@ import { FiUser } from "react-icons/fi";
 
 const testimonials = [
   {
-    name: "FOLA JACOB",
+    name: "Emily Johnson",
     role: "student",
-    text: "I've used this platform multiple times, and it never disappoints! The user interface is easy to navigate",
+    text: "This platform has been a lifesaver during my studies. Everything is organized and easy to find!",
   },
   {
-    name: "FOLA JACOB",
-    role: "student",
-    text: "I've used this platform multiple times, and it never disappoints! The user interface is easy to navigate",
+    name: "Michael Smith",
+    role: "teacher",
+    text: "I recommend this platform to my students all the time. It’s reliable and user-friendly.",
   },
   {
-    name: "FOLA JACOB",
-    role: "student",
-    text: "I've used this platform multiple times, and it never disappoints! The user interface is easy to navigate",
+    name: "Jessica Brown",
+    role: "freelancer",
+    text: "I love how intuitive the design is. It saves me so much time when I’m working on projects.",
   },
   {
-    name: "FOLA JACOB",
-    role: "student",
-    text: "I've used this platform multiple times, and it never disappoints! The user interface is easy to navigate",
+    name: "David Miller",
+    role: "professional",
+    text: "The support team is fantastic! Anytime I had a question, they responded quickly and helped me out.",
   },
 ];
 

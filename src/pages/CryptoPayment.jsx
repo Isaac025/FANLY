@@ -1,25 +1,58 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { HeroBlock, FormHeader, HelpCTA, PageFooter } from "./BookingShared";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function CryptoPayment() {
   const { state } = useLocation();
   const navigate = useNavigate();
 
+  const [btcRate, setBtcRate] = useState(0);
+
   const booking = state?.booking;
+  const donation = state?.donation;
+  const membership = state?.membership;
   const celebrity = state?.celebrity;
   const type = state?.type || "booking";
 
-  const cryptoAddress = "0xA7B9cD12Ef34567890aBCdEf1234567890ABcDEF";
+  const cryptoAddress = "bc1qu57er6n853w95glt0z6sugx728uddc8yca76pn";
+  const cryptoNetwork = "Bitcoin (BTC)";
 
   const celebrityName =
-    celebrity?.name || booking?.celebrityName || "Selected Celebrity";
+    celebrity?.name ||
+    booking?.celebrityName ||
+    donation?.celebrityName ||
+    membership?.celebrityName ||
+    "Selected Celebrity";
 
-  const amount = Number(booking?.amount || state?.amount || 0);
-  const serviceFee = Number(booking?.serviceFee || 5.56);
-  const total = Number(booking?.total || amount + serviceFee);
+  const amount = Number(
+    booking?.amount ||
+      donation?.amount ||
+      membership?.annualFee ||
+      state?.amount ||
+      0,
+  );
+
+  const serviceFee = Number(
+    booking?.serviceFee ||
+      donation?.serviceFee ||
+      membership?.processingFee ||
+      5.56,
+  );
+
+  const total = Number(
+    booking?.total ||
+      donation?.total ||
+      membership?.total ||
+      amount + serviceFee,
+  );
+
+  const totalBTC = btcRate ? total / btcRate : 0;
+
+  const qrData = `bitcoin:${cryptoAddress}?amount=${totalBTC.toFixed(6)}`;
+  const qrImage = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encodeURIComponent(
+    qrData,
+  )}`;
 
   const paymentType =
     type === "booking"
@@ -28,14 +61,36 @@ export default function CryptoPayment() {
         ? "Donation Payment"
         : "VIP Membership Payment";
 
+  useEffect(() => {
+    const fetchBTCPrice = async () => {
+      try {
+        const res = await fetch(
+          "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd",
+        );
+
+        const data = await res.json();
+        setBtcRate(data.bitcoin.usd);
+      } catch (error) {
+        toast.error("Could not fetch BTC rate");
+      }
+    };
+
+    fetchBTCPrice();
+  }, []);
+
+  const copyAddress = () => {
+    navigator.clipboard.writeText(cryptoAddress);
+    toast.success("BTC wallet address copied");
+  };
+
   return (
     <div className="page-shell">
       <HeroBlock mode="booking" celebrity={celebrity} />
 
       <main className="form-card">
         <FormHeader
-          title="Crypto Payment"
-          subtitle="Complete your payment using cryptocurrency"
+          title="Bitcoin Payment"
+          subtitle="Complete your payment using Bitcoin"
           button="Crypto"
         />
 
@@ -65,36 +120,45 @@ export default function CryptoPayment() {
           <div className="divider" />
 
           <div className="summary-row">
-            <span>Total</span>
+            <span>Total USD</span>
             <b>${total.toLocaleString()}</b>
+          </div>
+
+          <div className="summary-row">
+            <span>Total BTC</span>
+            <b>{btcRate ? `${totalBTC.toFixed(6)} BTC` : "Loading..."}</b>
           </div>
         </div>
 
         <div className="crypto-box">
-          <h3>Scan QR Code</h3>
-          <p>Scan the QR code below with your crypto wallet to continue.</p>
+          <h3>Scan Bitcoin QR Code</h3>
+          <p>
+            Send only Bitcoin (BTC) to this address. Sending any other crypto
+            may result in loss of funds.
+          </p>
 
           <div className="qr-placeholder">
-            <div className="qr-grid">
-              {Array.from({ length: 64 }).map((_, index) => (
-                <span key={index}></span>
-              ))}
+            {btcRate ? (
+              <img src={qrImage} alt="Bitcoin payment QR code" />
+            ) : (
+              <p>Loading QR code...</p>
+            )}
+          </div>
+
+          <div className="crypto-address-box">
+            <label>Network</label>
+            <div className="address-row">
+              <span>{cryptoNetwork}</span>
             </div>
           </div>
 
           <div className="crypto-address-box">
-            <label>Crypto Wallet Address</label>
+            <label>BTC Wallet Address</label>
 
             <div className="address-row">
               <span>{cryptoAddress}</span>
 
-              <button
-                type="button"
-                onClick={() => {
-                  navigator.clipboard.writeText(cryptoAddress);
-                  toast.success("Wallet address copied");
-                }}
-              >
+              <button type="button" onClick={copyAddress}>
                 Copy
               </button>
             </div>
@@ -108,18 +172,20 @@ export default function CryptoPayment() {
                 state: {
                   celebrity,
                   booking,
-                  donation: state?.donation,
-                  membership: state?.membership,
+                  donation,
+                  membership,
                   type,
                   amount,
                   serviceFee,
                   total,
+                  totalBTC,
                   cryptoAddress,
+                  cryptoNetwork,
                 },
               })
             }
           >
-            Proceed to pay →
+            I Have Paid →
           </button>
         </div>
       </main>

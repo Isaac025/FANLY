@@ -25,6 +25,9 @@ import UserVipMemberships from "./pages/UserVipMemberships";
 import Profile from "./pages/Profile";
 import AdminLogin from "./admin/AdminLogin";
 import PaymentConfirmation from "./pages/PaymentConfirmation";
+import ChatWidget from "./components/ChatWidget";
+import AdminChats from "./admin/AdminChats";
+import AdminChatDetails from "./admin/AdminChatDetails";
 
 function App() {
   return (
@@ -124,10 +127,13 @@ function App() {
             <Route path="bookings" element={<AdminBookings />} />
             <Route path="donations" element={<AdminDonations />} />
             <Route path="vip-memberships" element={<AdminVipMemberships />} />
+            <Route path="chats" element={<AdminChats />} />
+            <Route path="chats/:id" element={<AdminChatDetails />} />
           </Route>
           <Route path="/payment" element={<CryptoPayment />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ChatWidget />
       </div>
     </Router>
   );
