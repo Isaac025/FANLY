@@ -28,6 +28,7 @@ import PaymentConfirmation from "./pages/PaymentConfirmation";
 import ChatWidget from "./components/ChatWidget";
 import AdminChats from "./admin/AdminChats";
 import AdminChatDetails from "./admin/AdminChatDetails";
+import BackToTop from "./components/BackToTop";
 
 function App() {
   return (
@@ -134,6 +135,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
         <ChatWidget />
+        <BackToTop />
       </div>
     </Router>
   );

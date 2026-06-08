@@ -53,7 +53,7 @@ export default function AdminChatDetails() {
       <h1 className="text-2xl font-bold mb-2">{chat.name}</h1>
       <p className="text-gray-500 mb-6">{chat.email}</p>
 
-      <div className="bg-white rounded-xl shadow p-6 h-[500px] overflow-y-auto">
+      <div className="bg-white rounded-xl shadow p-6 h-125 overflow-y-auto">
         {chat.messages.map((msg) => (
           <div
             key={msg._id}

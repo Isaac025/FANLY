@@ -79,7 +79,7 @@ export default function ChatWidget() {
       )}
 
       {open && (
-        <div className="fixed bottom-6 right-6 w-[350px] max-w-[92vw] h-[520px] bg-white rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col">
+        <div className="fixed bottom-6 right-6 w-87.5 max-w-[92vw] h-130 bg-white rounded-2xl shadow-2xl z-50 overflow-hidden flex flex-col">
           <div className="bg-blue-600 text-white p-5 flex justify-between items-center">
             <div>
               <h3 className="font-bold text-lg">Send us a message</h3>
