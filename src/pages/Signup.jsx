@@ -6,6 +6,8 @@ import * as yup from "yup";
 import SignupImage from "../assets/SignupImage.png";
 import { useAppContext } from "../context/AppContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { GoogleLogin } from "@react-oauth/google";
+import { toast } from "react-toastify";
 
 const signupSchema = yup.object().shape({
   fullName: yup.string().required("Full name is required"),
@@ -27,7 +29,7 @@ const signupSchema = yup.object().shape({
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { register: registerUser, loading } = useAppContext();
+  const { register: registerUser, loading, googleLogin } = useAppContext();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -56,6 +58,15 @@ const Signup = () => {
       navigate("/login");
     }
   };
+
+  const handleGoogleSuccess = async (response) => {
+    const loggedUser = await googleLogin(response.credential);
+
+    if (loggedUser) {
+      navigate("/");
+    }
+  };
+
   return (
     <div className="container lg:flex min-h-screen bg-white">
       <div className="max-w-125 w-full flex flex-col justify-center sm:px-6 md:px-8 lg:px-16">
@@ -192,18 +203,15 @@ const Signup = () => {
             <span className="text-gray-500">Or</span>
           </div>
 
-          <button
-            type="button"
-            className="w-full border py-2 rounded flex justify-center items-center space-x-2 cursor-pointer"
-          >
-            <img
-              src="https://www.svgrepo.com/show/355037/google.svg"
-              alt="Google"
-              className="w-5 h-5"
-            />
-            <span>Continue with Google</span>
-          </button>
-
+          <GoogleLogin
+            theme="outline"
+            size="large"
+            text="continue_with"
+            shape="rectangular"
+            width="100%"
+            onSuccess={handleGoogleSuccess}
+            onError={() => toast.error("Google login failed")}
+          />
           <p className="text-center text-gray-600 mt-4">
             Already have an account?{" "}
             <Link to="/login" className="text-blue-600">

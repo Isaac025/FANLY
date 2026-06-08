@@ -6,6 +6,8 @@ import LoginImage from "../assets/LoginImage.png"; // Replace with your actual i
 import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { GoogleLogin } from "@react-oauth/google";
+import { toast } from "react-toastify";
 
 const loginSchema = yup.object().shape({
   identifier: yup.string().required("Email or username is required"),
@@ -24,12 +26,20 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const { login, loading } = useAppContext();
+  const { login, loading, googleLogin } = useAppContext();
 
   const onSubmit = async (data) => {
     const success = await login(data);
 
     if (success) {
+      navigate("/");
+    }
+  };
+
+  const handleGoogleSuccess = async (response) => {
+    const loggedUser = await googleLogin(response.credential);
+
+    if (loggedUser) {
       navigate("/");
     }
   };
@@ -101,17 +111,15 @@ const Login = () => {
             <span className="text-gray-500">Or</span>
           </div>
 
-          <button
-            type="button"
-            className="w-full border py-2 rounded flex justify-center items-center space-x-2 cursor-pointer"
-          >
-            <img
-              src="https://www.svgrepo.com/show/355037/google.svg"
-              alt="Google"
-              className="w-5 h-5"
-            />
-            <span>Continue with Google</span>
-          </button>
+          <GoogleLogin
+            theme="outline"
+            size="large"
+            text="continue_with"
+            shape="rectangular"
+            width="100%"
+            onSuccess={handleGoogleSuccess}
+            onError={() => toast.error("Google login failed")}
+          />
 
           <p className="text-center text-gray-600 mt-4">
             New user?{" "}

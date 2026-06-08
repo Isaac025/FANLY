@@ -5,13 +5,16 @@ import "./index.css";
 import App from "./App.jsx";
 import { AppProvider } from "./context/AppContext";
 
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import "react-toastify/dist/ReactToastify.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AppProvider>
-      <App />
-      <ToastContainer position="top-right" autoClose={3000} />
-    </AppProvider>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <AppProvider>
+        <App />
+        <ToastContainer position="top-right" autoClose={3000} />
+      </AppProvider>
+    </GoogleOAuthProvider>
   </StrictMode>,
 );

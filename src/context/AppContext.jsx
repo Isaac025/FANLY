@@ -161,6 +161,31 @@ export const AppProvider = ({ children }) => {
     }
   };
 
+  const googleLogin = async (credential) => {
+    setLoading(true);
+
+    try {
+      const { data } = await axiosInstance.post("/auth/google", {
+        credential,
+      });
+
+      const accessToken = data?.data?.accessToken;
+      const userData = data?.data?.user;
+
+      localStorage.setItem("lnq_token", accessToken);
+      localStorage.setItem("user", JSON.stringify(userData));
+      setUser(userData);
+
+      toast.success(data.message || "Google login successful");
+      return userData;
+    } catch (error) {
+      toast.error(error.message || "Google login failed");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getMe();
     fetchCelebrities();
@@ -181,6 +206,7 @@ export const AppProvider = ({ children }) => {
         createBooking,
         createDonation,
         createVipMembership,
+        googleLogin,
       }}
     >
       {children}
