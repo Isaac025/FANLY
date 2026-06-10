@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import logohome from "../assets/logohome.png"; // Replace with your actual logo path
+import logohome from "../assets/logohome.png";
 import { useAppContext } from "../context/AppContext";
-import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
+import { FaBars, FaTimes, FaCrown, FaUserCircle } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+
   const navigate = useNavigate();
   const { user, isLoggedIn, logout } = useAppContext();
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const initials =
     user?.fullName
@@ -18,236 +20,254 @@ const Navbar = () => {
       .substring(0, 2)
       .toUpperCase() || "U";
 
-  const handleLogout = async () => {
-    await logout();
-    navigate("/login");
+  const goTo = (path) => {
+    navigate(path);
+    setIsOpen(false);
+    setShowProfileMenu(false);
   };
 
+  const handleLogout = async () => {
+    await logout();
+    goTo("/login");
+  };
+
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "About", path: "/about" },
+    { name: "Contact", path: "/contact" },
+  ];
+
   return (
-    <nav className=" w-full bg-white  shadow-sm fixed top-0 left-0 z-50">
-      <div className="flex items-center max-md:justify-between lg:gap-100 px-6 py-4 lg:px-12">
-        {/* Logo */}
-        <img
-          src={logohome}
-          alt="Logo"
-          className="h-15 w-15 cursor-pointer"
-          onClick={() => navigate("/")}
-        />
-
-        {/* Desktop Menu */}
-        <div className="hidden lg:flex items-center space-x-30 font-medium text-[#3D3D3D] text-[18px]">
-          <ul className="lg:flex items-center space-x-4">
-            <li
-              className="hover:text-blue-600 cursor-pointer"
-              onClick={() => navigate("/")}
-            >
-              HOME
-            </li>
-            <li
-              className="hover:text-blue-600 cursor-pointer"
-              onClick={() => navigate("/about")}
-            >
-              ABOUT
-            </li>
-
-            <li
-              className="hover:text-blue-600 cursor-pointer"
-              onClick={() => navigate("/contact")}
-            >
-              CONTACT
-            </li>
-          </ul>
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate("/book-celebrity")}
-              className="cursor-pointer border border-blue-600 text-blue-600 px-4 py-1 rounded-full hover:bg-blue-600 hover:text-white transition"
-            >
-              Book Now
-            </button>
-
-            {!isLoggedIn ? (
-              <>
-                <button
-                  onClick={() => navigate("/login")}
-                  className="hover:text-blue-600 cursor-pointer"
-                >
-                  LOGIN
-                </button>
-
-                <button
-                  onClick={() => navigate("/signup")}
-                  className="hover:text-blue-600 cursor-pointer"
-                >
-                  REGISTER
-                </button>
-              </>
-            ) : (
-              <div className="relative">
-                <button
-                  onClick={() => setShowProfileMenu(!showProfileMenu)}
-                  className="w-11 h-11 rounded-full bg-[#1D4996] text-white flex items-center justify-center font-semibold overflow-hidden"
-                >
-                  {user?.profilePicture ? (
-                    <img
-                      src={user.profilePicture}
-                      alt={user.fullName}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    initials
-                  )}
-                </button>
-
-                {showProfileMenu && (
-                  <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-xl w-56 p-3 border">
-                    <div className="border-b pb-2 mb-2">
-                      <h4 className="font-semibold">{user?.fullName}</h4>
-                      <p className="text-xs text-gray-500">{user?.email}</p>
-                    </div>
-
-                    <button
-                      onClick={() => navigate("/profile")}
-                      className="w-full text-left py-2 hover:text-blue-600"
-                    >
-                      My Profile
-                    </button>
-
-                    <button
-                      onClick={() => navigate("/my-bookings")}
-                      className="w-full text-left py-2 hover:text-blue-600"
-                    >
-                      My Bookings
-                    </button>
-
-                    <button
-                      onClick={() => navigate("/my-donations")}
-                      className="w-full text-left py-2 hover:text-blue-600"
-                    >
-                      My Donations
-                    </button>
-
-                    <button
-                      onClick={() => navigate("/my-vip-memberships")}
-                      className="w-full text-left py-2 hover:text-blue-600"
-                    >
-                      My VIP Memberships
-                    </button>
-
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left py-2 text-red-500"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Mobile Menu Icon */}
-        <div
-          className="lg:hidden text-2xl text-gray-700 cursor-pointer"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <FaTimes /> : <FaBars />}
-        </div>
-      </div>
-
-      {/* Mobile Dropdown Menu with animation */}
-      <div
-        className={`lg:hidden bg-white shadow-md border-t border-gray-200 overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
-        }`}
+    <nav className="fixed left-0 top-0 z-50 w-full px-4 py-4">
+      <motion.div
+        initial={{ y: -40, opacity: 0, filter: "blur(12px)" }}
+        animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+        transition={{ duration: 0.8 }}
+        className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/10 bg-[#05070F]/75 px-4 py-3 shadow-[0_20px_70px_rgba(0,0,0,0.45)] backdrop-blur-2xl md:px-6"
       >
-        <ul className="flex flex-col space-y-4 py-6 px-6 text-gray-700 font-medium">
-          {!isLoggedIn ? (
-            <>
-              <li
-                className="hover:text-blue-600 cursor-pointer"
-                onClick={() => navigate("/login")}
-              >
-                LOGIN
-              </li>
+        <button onClick={() => goTo("/")} className="flex items-center gap-3">
+          <div className="relative">
+            <div className="absolute inset-0 rounded-full bg-[#D6B36A]/40 blur-xl" />
+            <img
+              src={logohome}
+              alt="Logo"
+              className="relative h-12 w-12 rounded-full object-contain"
+            />
+          </div>
 
-              <li
-                className="hover:text-blue-600 cursor-pointer"
-                onClick={() => navigate("/signup")}
-              >
-                REGISTER
-              </li>
-            </>
-          ) : (
-            <>
-              <li className="font-semibold text-[#1D4996]">{user?.fullName}</li>
+          <span className="hidden bg-linear-to-r from-[#F2D38A] via-white to-[#9DB7FF] bg-clip-text text-lg font-black tracking-tight text-transparent sm:block">
+            celebrity bookings
+          </span>
+        </button>
 
-              <li
-                className="hover:text-blue-600 cursor-pointer"
-                onClick={() => navigate("/profile")}
+        <ul className="hidden items-center gap-2 rounded-full border border-white/10 bg-white/6 px-2 py-2 lg:flex">
+          {navLinks.map((link) => (
+            <li key={link.name}>
+              <button
+                onClick={() => goTo(link.path)}
+                className="group relative rounded-full px-5 py-2 text-sm font-bold uppercase tracking-wide text-[#B9C2D0] transition hover:text-[#F2D38A]"
               >
-                My Profile
-              </li>
+                {link.name}
+                <span className="absolute bottom-1 left-1/2 h-0.5 w-0 -translate-x-1/2 rounded-full bg-linear-to-r from-[#D6B36A] to-[#F2D38A] transition-all duration-300 group-hover:w-8" />
+              </button>
+            </li>
+          ))}
+        </ul>
 
-              <li
-                className="hover:text-blue-600 cursor-pointer"
-                onClick={() => navigate("/my-bookings")}
-              >
-                My Bookings
-              </li>
-
-              <li
-                onClick={() => navigate("/my-donations")}
-                className="w-full text-left py-2 hover:text-blue-600"
-              >
-                My Donations
-              </li>
-
-              <li
-                onClick={() => navigate("/my-vip-memberships")}
-                className="w-full text-left py-2 hover:text-blue-600"
-              >
-                My VIP Memberships
-              </li>
-
-              <li
-                className="text-red-500 cursor-pointer"
-                onClick={handleLogout}
-              >
-                Logout
-              </li>
-            </>
-          )}
-          <li
-            className="hover:text-blue-600 cursor-pointer"
-            onClick={() => navigate("/")}
-          >
-            HOME
-          </li>
-          <li
-            className="hover:text-blue-600 cursor-pointer"
-            onClick={() => navigate("/about")}
-          >
-            ABOUT
-          </li>
-
-          <li
-            className="hover:text-blue-600 cursor-pointer"
-            onClick={() => navigate("/contact")}
-          >
-            CONTACT
-          </li>
+        <div className="hidden items-center gap-3 lg:flex">
           <button
-            onClick={() => {
-              navigate("/book-celebrity");
-              setIsOpen(false);
-            }}
-            className="border border-blue-600 text-blue-600 px-4 py-1 rounded-full hover:bg-blue-600 hover:text-white transition"
+            onClick={() => goTo("/book-celebrity")}
+            className="rounded-full bg-linear-to-r from-[#D6B36A] via-[#F2D38A] to-[#C7A76C] px-6 py-3 text-sm font-black uppercase tracking-wide text-[#05070F] shadow-[0_0_35px_rgba(214,179,106,0.35)] transition hover:scale-105"
           >
             Book Now
           </button>
-        </ul>
-      </div>
+
+          {!isLoggedIn ? (
+            <>
+              <button
+                onClick={() => goTo("/login")}
+                className="rounded-full px-4 py-2 text-sm font-bold text-[#B9C2D0] transition hover:text-[#F2D38A]"
+              >
+                Login
+              </button>
+
+              <button
+                onClick={() => goTo("/signup")}
+                className="rounded-full border border-white/10 bg-white/6 px-4 py-2 text-sm font-bold text-white transition hover:border-[#D6B36A]/60 hover:text-[#F2D38A]"
+              >
+                Register
+              </button>
+            </>
+          ) : (
+            <div className="relative">
+              <button
+                onClick={() => setShowProfileMenu(!showProfileMenu)}
+                className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-linear-to-br from-[#D6B36A] to-[#4C3F91] font-black text-white shadow-lg"
+              >
+                {user?.profilePicture ? (
+                  <img
+                    src={user.profilePicture}
+                    alt={user.fullName}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  initials
+                )}
+              </button>
+
+              <AnimatePresence>
+                {showProfileMenu && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 18, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 18, scale: 0.96 }}
+                    className="absolute right-0 mt-4 w-72 overflow-hidden rounded-[28px] border border-white/10 bg-[#05070F]/95 p-4 shadow-[0_30px_90px_rgba(0,0,0,0.55)] backdrop-blur-2xl"
+                  >
+                    <div className="mb-3 border-b border-white/10 pb-3">
+                      <h4 className="font-black text-white">
+                        {user?.fullName}
+                      </h4>
+                      <p className="truncate text-xs text-[#B9C2D0]">
+                        {user?.email}
+                      </p>
+                    </div>
+
+                    {[
+                      ["My Profile", "/profile"],
+                      ["My Bookings", "/my-bookings"],
+                      ["My Donations", "/my-donations"],
+                      ["My VIP Memberships", "/my-vip-memberships"],
+                    ].map(([name, path]) => (
+                      <button
+                        key={name}
+                        onClick={() => goTo(path)}
+                        className="w-full rounded-2xl px-4 py-3 text-left text-sm font-semibold text-[#B9C2D0] transition hover:bg-white/10 hover:text-[#F2D38A]"
+                      >
+                        {name}
+                      </button>
+                    ))}
+
+                    <button
+                      onClick={handleLogout}
+                      className="mt-2 w-full rounded-2xl px-4 py-3 text-left text-sm font-bold text-red-400 transition hover:bg-red-500/10"
+                    >
+                      Logout
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
+        </div>
+
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/8 text-xl text-white shadow-sm lg:hidden"
+        >
+          {isOpen ? <FaTimes /> : <FaBars />}
+        </button>
+      </motion.div>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -18, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -18, scale: 0.96 }}
+            transition={{ duration: 0.35 }}
+            className="mx-auto mt-3 max-w-7xl overflow-hidden rounded-4xl border border-white/10 bg-[#05070F]/95 shadow-[0_30px_90px_rgba(0,0,0,0.55)] backdrop-blur-2xl lg:hidden"
+          >
+            <div className="space-y-2 px-5 py-6">
+              {isLoggedIn && (
+                <div className="mb-4 flex items-center gap-3 rounded-3xl border border-white/10 bg-white/6 p-4">
+                  <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-linear-to-br from-[#D6B36A] to-[#4C3F91] font-black text-white">
+                    {user?.profilePicture ? (
+                      <img
+                        src={user.profilePicture}
+                        alt={user.fullName}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      initials
+                    )}
+                  </div>
+
+                  <div className="min-w-0">
+                    <h4 className="truncate font-black text-white">
+                      {user?.fullName}
+                    </h4>
+                    <p className="truncate text-xs text-[#B9C2D0]">
+                      {user?.email}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {navLinks.map((link) => (
+                <button
+                  key={link.name}
+                  onClick={() => goTo(link.path)}
+                  className="w-full rounded-2xl px-4 py-4 text-left text-sm font-black uppercase tracking-wide text-[#B9C2D0] transition hover:bg-white/10 hover:text-[#F2D38A]"
+                >
+                  {link.name}
+                </button>
+              ))}
+
+              <button
+                onClick={() => {
+                  goTo("/book-celebrity");
+                  scrollTo(0, 0);
+                }}
+                className="mt-3 cursor-pointer flex w-full items-center justify-center gap-3 rounded-full bg-linear-to-r from-[#D6B36A] via-[#F2D38A] to-[#C7A76C] px-6 py-4 text-sm font-black uppercase tracking-widest text-[#05070F] shadow-[0_0_35px_rgba(214,179,106,0.35)]"
+              >
+                <FaCrown />
+                Book Now
+              </button>
+
+              {!isLoggedIn ? (
+                <div className="grid grid-cols-2 gap-3 pt-3">
+                  <button
+                    onClick={() => goTo("/login")}
+                    className="rounded-full border border-white/10 px-5 py-3 text-sm font-black text-white"
+                  >
+                    Login
+                  </button>
+                  <button
+                    onClick={() => goTo("/signup")}
+                    className="rounded-full bg-white px-5 py-3 text-sm font-black text-[#05070F]"
+                  >
+                    Register
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-2 pt-3">
+                  {[
+                    ["My Profile", "/profile"],
+                    ["My Bookings", "/my-bookings"],
+                    ["My Donations", "/my-donations"],
+                    ["My VIP Memberships", "/my-vip-memberships"],
+                  ].map(([name, path]) => (
+                    <button
+                      key={name}
+                      onClick={() => goTo(path)}
+                      className="w-full rounded-2xl px-4 py-3 text-left text-sm font-semibold text-[#B9C2D0] transition hover:bg-white/10 hover:text-[#F2D38A]"
+                    >
+                      {name}
+                    </button>
+                  ))}
+
+                  <button
+                    onClick={handleLogout}
+                    className="w-full rounded-2xl px-4 py-3 text-left text-sm font-bold text-red-400 transition hover:bg-red-500/10"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
