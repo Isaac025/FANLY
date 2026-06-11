@@ -158,7 +158,7 @@ export default function Booking() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="+234 7000000"
+                  placeholder="+1 70376000"
                 />
               </div>
 

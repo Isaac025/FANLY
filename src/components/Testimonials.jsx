@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaStar,
@@ -38,6 +39,56 @@ const testimonials = [
 
 const Testimonials = () => {
   const [showModal, setShowModal] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [story, setStory] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const FORM_ENDPOINT = "https://formspree.io/f/xzdqaqdw";
+
+  const handleSubmitStory = async (e) => {
+    e.preventDefault();
+
+    if (!name || !email || !story) {
+      toast.error("Please complete all fields");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          subject: "New Fanly Story Submission",
+          name,
+          email,
+          story,
+          source: "Fanly Testimonials",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error();
+      }
+
+      toast.success("Thank you for sharing your story!");
+
+      setName("");
+      setEmail("");
+      setStory("");
+
+      setShowModal(false);
+    } catch {
+      toast.error("Could not submit your story");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="relative overflow-hidden bg-[#05070F] px-5 py-24 text-white">
@@ -188,32 +239,38 @@ const Testimonials = () => {
                   to your backend or email service.
                 </p>
 
-                <form className="mt-7 space-y-4">
+                <form onSubmit={handleSubmitStory} className="mt-7 space-y-4">
                   <input
                     type="text"
                     placeholder="Your name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
                     className="w-full rounded-2xl border border-white/10 bg-white/[0.06] px-5 py-4 text-white outline-none placeholder:text-[#8B95A5]"
                   />
 
                   <input
                     type="email"
                     placeholder="Email address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full rounded-2xl border border-white/10 bg-white/[0.06] px-5 py-4 text-white outline-none placeholder:text-[#8B95A5]"
                   />
 
                   <textarea
                     rows="5"
                     placeholder="Tell us about your Fanly experience..."
+                    value={story}
+                    onChange={(e) => setStory(e.target.value)}
                     className="w-full resize-none rounded-2xl border border-white/10 bg-white/[0.06] px-5 py-4 text-white outline-none placeholder:text-[#8B95A5]"
                   />
 
                   <button
-                    type="button"
-                    onClick={() => setShowModal(false)}
+                    type="submit"
+                    disabled={loading}
                     className="flex w-full items-center justify-center gap-3 rounded-full bg-gradient-to-r from-[#D6B36A] via-[#F2D38A] to-[#C7A76C] px-8 py-4 text-sm font-black uppercase tracking-widest text-[#05070F]"
                   >
                     <FaPaperPlane />
-                    Submit Story
+                    {loading ? "Submitting..." : "Submit Story"}
                   </button>
                 </form>
               </div>

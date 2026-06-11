@@ -10,6 +10,9 @@ const initialForm = {
   bookingFee: "",
   image: "",
   description: "",
+  standardFee: "",
+  premiumFee: "",
+  platinumFee: "",
 };
 
 const handleImageUpload = async (e) => {
@@ -101,16 +104,27 @@ export default function AdminCelebrities() {
     e.preventDefault();
     setLoading(true);
 
+    const payload = {
+      ...formData,
+      bookingFee: Number(formData.bookingFee || 0),
+      fanCardFee: Number(formData.standardFee || 0),
+      vipTierFees: {
+        standard: Number(formData.standardFee || 0),
+        premium: Number(formData.premiumFee || 0),
+        platinum: Number(formData.platinumFee || 0),
+      },
+    };
+
     try {
       if (editingId) {
         const { data } = await axiosInstance.put(
           `/celebrities/${editingId}`,
-          formData,
+          payload,
         );
 
         toast.success(data.message || "Celebrity updated successfully");
       } else {
-        const { data } = await axiosInstance.post("/celebrities", formData);
+        const { data } = await axiosInstance.post("/celebrities", payload);
 
         toast.success(data.message || "Celebrity created successfully");
       }
@@ -135,6 +149,9 @@ export default function AdminCelebrities() {
       bookingFee: celebrity.bookingFee || "",
       image: celebrity.image || celebrity.img || "",
       description: celebrity.description || "",
+      standardFee: celebrity.vipTierFees?.standard || "",
+      premiumFee: celebrity.vipTierFees?.premium || "",
+      platinumFee: celebrity.vipTierFees?.platinum || "",
     });
 
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -217,7 +234,7 @@ export default function AdminCelebrities() {
           </div>
 
           <div>
-            <label className="block mb-1 font-medium">Price</label>
+            <label className="block mb-1 font-medium">Booking Price</label>
             <input
               type="number"
               name="bookingFee"
@@ -225,6 +242,7 @@ export default function AdminCelebrities() {
               onChange={handleChange}
               className="w-full border rounded px-3 py-2"
               placeholder="10000"
+              min={0}
             />
           </div>
 
@@ -240,7 +258,46 @@ export default function AdminCelebrities() {
             )}
           </div>
         </div>
+        <div className="flex flex-col md:flex-row items-center md:justify-between my-4">
+          <div>
+            <label className="block mb-1 font-medium">Standard (fancard)</label>
+            <input
+              type="number"
+              name="standardFee"
+              value={formData.standardFee}
+              onChange={handleChange}
+              placeholder="Standard fee"
+              min={0}
+              className="border rounded px-3 py-2"
+            />
+          </div>
 
+          <div>
+            <label className="block mb-1 font-medium">Premium (fancard)</label>
+            <input
+              type="number"
+              name="premiumFee"
+              value={formData.premiumFee}
+              onChange={handleChange}
+              placeholder="Premium fee"
+              min={0}
+              className="border rounded px-3 py-2"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-1 font-medium">Platinum (fancard)</label>
+            <input
+              type="number"
+              name="platinumFee"
+              value={formData.platinumFee}
+              onChange={handleChange}
+              placeholder="Platinum fee"
+              min={0}
+              className="border rounded px-3 py-2"
+            />
+          </div>
+        </div>
         <div className="mt-4">
           <label className="block mb-1 font-medium">Description</label>
           <textarea

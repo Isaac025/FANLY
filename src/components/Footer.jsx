@@ -13,6 +13,9 @@ import {
   FaBolt,
 } from "react-icons/fa";
 
+import { useState } from "react";
+import { toast } from "react-toastify";
+
 const companyLinks = ["Home", "About", "Contact", "Blog", "Careers", "News"];
 const policyLinks = [
   "Terms of Use",
@@ -40,6 +43,49 @@ const marquee = [
 ];
 
 const Footer = () => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const FORM_ENDPOINT = "https://formspree.io/f/xzdqaqdw";
+
+  const handlePremiumJoin = async (e) => {
+    e.preventDefault();
+
+    if (!email.trim()) {
+      toast.error("Please enter your email");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          subject: "New Premium Experience Subscriber",
+          email,
+          type: "Premium Experience",
+          source: "Footer CTA",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error();
+      }
+
+      toast.success("You have joined the Premium Experience list");
+      setEmail("");
+    } catch {
+      toast.error("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <footer className="relative overflow-hidden bg-[#05070F] px-5 pt-24 text-white">
       {/* Background */}
@@ -78,18 +124,28 @@ const Footer = () => {
               fan rooms, exclusive drops and celebrity moments worth sharing.
             </p>
 
-            <div className="mx-auto mt-8 flex max-w-xl flex-col gap-3 rounded-full border border-white/10 bg-black/25 p-2 backdrop-blur-xl sm:flex-row">
+            <form
+              onSubmit={handlePremiumJoin}
+              className="mx-auto mt-8 flex max-w-xl flex-col gap-3 rounded-full border border-white/10 bg-black/25 p-2 backdrop-blur-xl sm:flex-row"
+            >
               <input
                 type="email"
                 placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="min-w-0 flex-1 rounded-full bg-transparent px-5 py-4 text-white outline-none placeholder:text-[#8B95A5]"
+                required
               />
 
-              <button className="flex items-center justify-center gap-3 rounded-full bg-gradient-to-r from-[#D6B36A] via-[#F2D38A] to-[#C7A76C] px-7 py-4 text-sm font-black uppercase tracking-widest text-[#05070F] transition hover:scale-105">
-                Join
+              <button
+                type="submit"
+                disabled={loading}
+                className="flex items-center justify-center gap-3 rounded-full bg-gradient-to-r from-[#D6B36A] via-[#F2D38A] to-[#C7A76C] px-7 py-4 text-sm font-black uppercase tracking-widest text-[#05070F] transition hover:scale-105"
+              >
+                {loading ? "Joining..." : "Join"}
                 <FaArrowRight />
               </button>
-            </div>
+            </form>
           </div>
         </motion.div>
 

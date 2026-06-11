@@ -1,5 +1,6 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Router, Routes, Route } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Home from "./pages/Home";
@@ -29,115 +30,119 @@ import ChatWidget from "./components/ChatWidget";
 import AdminChats from "./admin/AdminChats";
 import AdminChatDetails from "./admin/AdminChatDetails";
 import BackToTop from "./components/BackToTop";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
+  const location = useLocation();
+
+  // Check if current path starts with /admin
+  const isAdminPage = location.pathname.startsWith("/admin");
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/book-celebrity" element={<BookCelebrity />} />
-          <Route
-            path="/booking"
-            element={
-              <ProtectedRoute>
-                <Booking />
-              </ProtectedRoute>
-            }
-          />
+    <div className="App">
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/book-celebrity" element={<BookCelebrity />} />
+        <Route
+          path="/booking"
+          element={
+            <ProtectedRoute>
+              <Booking />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/my-bookings"
-            element={
-              <ProtectedRoute>
-                <UserBookings />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/my-bookings"
+          element={
+            <ProtectedRoute>
+              <UserBookings />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/my-donations"
-            element={
-              <ProtectedRoute>
-                <UserDonations />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/my-donations"
+          element={
+            <ProtectedRoute>
+              <UserDonations />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/my-vip-memberships"
-            element={
-              <ProtectedRoute>
-                <UserVipMemberships />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/my-vip-memberships"
+          element={
+            <ProtectedRoute>
+              <UserVipMemberships />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/vip-membership"
-            element={
-              <ProtectedRoute>
-                <VipMembership />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/vip-membership"
+          element={
+            <ProtectedRoute>
+              <VipMembership />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/donation"
-            element={
-              <ProtectedRoute>
-                <Donation />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/donation"
+          element={
+            <ProtectedRoute>
+              <Donation />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route
-            path="/payment-confirmation"
-            element={
-              <ProtectedRoute>
-                <PaymentConfirmation />
-              </ProtectedRoute>
-            }
-          />
+        <Route
+          path="/payment-confirmation"
+          element={
+            <ProtectedRoute>
+              <PaymentConfirmation />
+            </ProtectedRoute>
+          }
+        />
 
-          <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
 
-          <Route
-            path="/admin"
-            element={
-              <AdminRoute>
-                <AdminLayout />
-              </AdminRoute>
-            }
-          >
-            <Route index element={<AdminDashboard />} />
-            <Route path="celebrities" element={<AdminCelebrities />} />
-            <Route path="bookings" element={<AdminBookings />} />
-            <Route path="donations" element={<AdminDonations />} />
-            <Route path="vip-memberships" element={<AdminVipMemberships />} />
-            <Route path="chats" element={<AdminChats />} />
-            <Route path="chats/:id" element={<AdminChatDetails />} />
-          </Route>
-          <Route path="/payment" element={<CryptoPayment />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <ChatWidget />
-        <BackToTop />
-      </div>
-    </Router>
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminLayout />
+            </AdminRoute>
+          }
+        >
+          <Route index element={<AdminDashboard />} />
+          <Route path="celebrities" element={<AdminCelebrities />} />
+          <Route path="bookings" element={<AdminBookings />} />
+          <Route path="donations" element={<AdminDonations />} />
+          <Route path="vip-memberships" element={<AdminVipMemberships />} />
+          <Route path="chats" element={<AdminChats />} />
+          <Route path="chats/:id" element={<AdminChatDetails />} />
+        </Route>
+        <Route path="/payment" element={<CryptoPayment />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+      {!isAdminPage && <ChatWidget />}
+      <BackToTop />
+    </div>
   );
 }
 
