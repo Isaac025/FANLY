@@ -120,7 +120,7 @@ const Signup = () => {
           <label className="text-[#000000] font-medium">Phone Number</label>
           <input
             {...register("phone")}
-            placeholder="+2347000000000"
+            placeholder="+17006700000"
             className="w-full border rounded px-3 py-2 bg-[#ECECEC] lg:bg-white"
           />
           <p className="text-red-500 text-sm">{errors.phone?.message}</p>
@@ -128,7 +128,7 @@ const Signup = () => {
           <label className="text-[#000000] font-medium">Country</label>
           <input
             {...register("country")}
-            placeholder="Nigeria"
+            placeholder="USA"
             className="w-full border rounded px-3 py-2 bg-[#ECECEC] lg:bg-white"
           />
           <p className="text-red-500 text-sm">{errors.country?.message}</p>

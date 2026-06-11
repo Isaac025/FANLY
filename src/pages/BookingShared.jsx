@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import featured from "../assets/featured.png";
 import "./BookingPages.css";
+import { useNavigate } from "react-router-dom";
 
 export const defaultCelebrity = {
   name: "May Rice",
@@ -74,9 +75,11 @@ export function HeroBlock({ mode = "vip", celebrity = defaultCelebrity }) {
             </p>
 
             <span className="price-pill">
-              {isBooking
-                ? `$${Number(bookingFee).toLocaleString()} Booking fee`
-                : `Fan card: $${Number(fanCardFee).toLocaleString()} annual membership`}
+              {isBooking && (
+                <span className="price-pill">
+                  ${Number(bookingFee).toLocaleString()} Booking fee
+                </span>
+              )}
             </span>
           </div>
         </div>
@@ -86,6 +89,7 @@ export function HeroBlock({ mode = "vip", celebrity = defaultCelebrity }) {
 }
 
 export function HelpCTA({ booking = false }) {
+  const navigate = useNavigate();
   return (
     <section className="cta">
       <h2>
@@ -100,11 +104,13 @@ export function HelpCTA({ booking = false }) {
       </p>
 
       <div className="cta-buttons">
-        <button className="primary">
+        <button className="primary" onClick={() => navigate("/contact")}>
           {booking ? "Contact us" : "Chat with support"}
         </button>
 
-        <button className="outline">Call us</button>
+        <button className="outline" onClick={() => navigate("/contact")}>
+          Call us
+        </button>
       </div>
     </section>
   );

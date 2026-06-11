@@ -1,22 +1,80 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
+import { toast } from "react-toastify";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+const FORM_ENDPOINT = "https://formspree.io/f/xzdqaqdw";
+
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleContactSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.name || !formData.email || !formData.message) {
+      toast.error("Please complete all fields");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const response = await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          subject: "New Contact Form Message",
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          source: "FANLY Contact Page",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error();
+      }
+
+      toast.success("Message sent successfully");
+
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
+    } catch {
+      toast.error("Could not send message. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Navbar />
-      <section className=" bg-linear-to-b mt-20 from-white via-gray-150 to-blue-250">
-        {/* Header */}
-        <div className="relative overflow-hidden bg-gray-50 h-80 flex items-center justify-center">
-          {/* Left gradient */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-64 h-40 bg-blue-500/30 blur-2xl" />
 
-          {/* Right gradient */}
+      <section className="bg-linear-to-b mt-20 from-white via-gray-150 to-blue-250">
+        <div className="relative overflow-hidden bg-gray-50 h-80 flex items-center justify-center">
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-64 h-40 bg-blue-500/30 blur-2xl" />
           <div className="absolute right-0 top-1/2 -translate-y-1/2 w-64 h-40 bg-blue-500/30 blur-2xl" />
 
-          {/* Optional subtle vertical pattern */}
           <div
             className="absolute inset-0 opacity-20"
             style={{
@@ -25,7 +83,6 @@ const Contact = () => {
             }}
           />
 
-          {/* Content */}
           <div className="relative z-10 text-center px-4 animate-fade-in">
             <h2 className="md:text-6xl text-[30px] font-bold md:font-semibold text-[#535252] mb-4">
               Contact us
@@ -38,58 +95,72 @@ const Contact = () => {
           </div>
         </div>
 
-        {/* Contact Form and Info */}
         <div className="container grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
-          {/* Form Section */}
           <div className="bg-white shadow-md rounded-lg p-6 animate-fade-in">
             <h3 className="text-lg font-semibold mb-2">Send a Message</h3>
+
             <p className="text-gray-600 mb-4 text-sm">
               Fill out the form and we’ll get back to you.
             </p>
-            <form className="space-y-4">
+
+            <form onSubmit={handleContactSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">Name</label>
+
                 <input
                   type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
                   required
                   placeholder="Enter your name"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
               </div>
+
               <div>
                 <label className="block text-sm font-medium mb-1">
                   Email Address
                 </label>
+
                 <input
                   type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   required
                   placeholder="Enter your email address"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
                 />
               </div>
+
               <div>
                 <label className="block text-sm font-medium mb-1">
                   Comment or message
                 </label>
+
                 <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
                   placeholder="Leave a message"
                   rows="4"
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
-                ></textarea>
+                />
               </div>
+
               <button
                 type="submit"
-                className="w-full cursor-pointer bg-blue-800 text-white font-semibold py-2 rounded-md hover:bg-blue-900 transition-colors duration-300"
+                disabled={loading}
+                className="w-full cursor-pointer bg-blue-800 text-white font-semibold py-2 rounded-md hover:bg-blue-900 transition-colors duration-300 disabled:opacity-70"
               >
-                Send Message
+                {loading ? "Sending..." : "Send Message"}
               </button>
             </form>
           </div>
 
-          {/* Contact Info Section */}
           <div className="flex flex-col justify-center space-y-8 animate-fade-in">
-            {/* Email */}
             <div className="flex items-start space-x-3">
               <FaEnvelope className="text-blue-600 text-xl mt-1" />
               <div>
@@ -103,7 +174,6 @@ const Contact = () => {
               </div>
             </div>
 
-            {/* Phone */}
             <div className="flex items-start space-x-3">
               <FaPhoneAlt className="text-blue-600 text-xl mt-1" />
               <div>
@@ -118,7 +188,6 @@ const Contact = () => {
               </div>
             </div>
 
-            {/* Address */}
             <div className="flex items-start space-x-3">
               <FaMapMarkerAlt className="text-blue-600 text-xl mt-1" />
               <div>
@@ -135,7 +204,6 @@ const Contact = () => {
           </div>
         </div>
 
-        {/* Map Section */}
         <div className="w-full h-96 rounded-lg overflow-hidden shadow-md animate-fade-in">
           <iframe
             title="Lagos Office Location"
@@ -143,9 +211,10 @@ const Contact = () => {
             className="w-full h-full border-0"
             allowFullScreen=""
             loading="lazy"
-          ></iframe>
+          />
         </div>
       </section>
+
       <Footer />
     </>
   );

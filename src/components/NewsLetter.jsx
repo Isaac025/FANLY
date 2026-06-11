@@ -1,8 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaStar, FaCrown, FaEnvelope, FaBolt } from "react-icons/fa";
+import { toast } from "react-toastify";
+
+const FORM_ENDPOINT = "https://formspree.io/f/xzdqaqdw";
 
 const NewsLetter = () => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+
+    if (!email.trim()) {
+      toast.error("Please enter your email address");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          subject: "New VIP Access Subscriber",
+          formType: "VIP Access List",
+          email,
+          message: `New user joined the FANLY VIP access list: ${email}`,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Subscription failed");
+      }
+
+      toast.success(
+        "VIP access unlocked. Check your inbox for future updates.",
+      );
+      setEmail("");
+    } catch (error) {
+      toast.error("Could not subscribe. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="relative overflow-hidden bg-[#05070F] px-5 py-24 text-white">
       <div className="pointer-events-none absolute inset-0">
@@ -87,22 +133,25 @@ const NewsLetter = () => {
               celebrity access opportunities delivered directly to you.
             </p>
 
-            <form className="mt-8 space-y-4">
+            <form onSubmit={handleSubscribe} className="mt-8 space-y-4">
               <div className="rounded-full border border-white/10 bg-black/25 p-2 backdrop-blur-xl">
                 <input
                   type="email"
                   placeholder="Enter your email address"
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full rounded-full bg-transparent px-5 py-4 text-white outline-none placeholder:text-[#8B95A5]"
                 />
               </div>
 
               <button
                 type="submit"
-                className="flex w-full items-center justify-center gap-3 rounded-full bg-gradient-to-r from-[#D6B36A] via-[#F2D38A] to-[#C7A76C] px-8 py-4 text-sm font-black uppercase tracking-widest text-[#05070F] shadow-[0_0_45px_rgba(214,179,106,0.4)] transition duration-300 hover:scale-[1.02]"
+                disabled={loading}
+                className="flex w-full items-center justify-center gap-3 rounded-full bg-gradient-to-r from-[#D6B36A] via-[#F2D38A] to-[#C7A76C] px-8 py-4 text-sm font-black uppercase tracking-widest text-[#05070F] shadow-[0_0_45px_rgba(214,179,106,0.4)] transition duration-300 hover:scale-[1.02] disabled:opacity-70"
               >
                 <FaBolt />
-                Unlock VIP Access
+                {loading ? "Submitting..." : "Unlock VIP Access"}
               </button>
             </form>
 

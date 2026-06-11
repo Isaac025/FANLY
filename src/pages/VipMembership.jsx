@@ -12,18 +12,19 @@ import { useAppContext } from "../context/AppContext";
 
 const processingFee = 5.56;
 
-const tiers = {
-  standard: 50,
-  premium: 75,
-  platinum: 100,
-};
-
 export default function VipMembership() {
   const [step, setStep] = useState(0);
   const { state } = useLocation();
   const navigate = useNavigate();
 
   const selectedCelebrity = state?.celebrity;
+
+  const tiers = selectedCelebrity?.vipTierFees || {
+    standard: 50,
+    premium: 75,
+    platinum: 100,
+  };
+
   const { createVipMembership, loading } = useAppContext();
 
   const [formData, setFormData] = useState({
@@ -172,7 +173,7 @@ export default function VipMembership() {
                   <span>⚪</span>
                   <b>Standard</b>
                   <small>
-                    $50/year
+                    ${Number(tiers.standard || 0).toLocaleString()}/year
                     <br />
                     Basic benefits
                   </small>
@@ -185,7 +186,7 @@ export default function VipMembership() {
                   <span>🏅</span>
                   <b>Premium</b>
                   <small>
-                    $75/year
+                    ${Number(tiers.premium || 0).toLocaleString()}/year
                     <br />
                     Recommended
                   </small>
@@ -198,7 +199,7 @@ export default function VipMembership() {
                   <span>💎</span>
                   <b>Platinum</b>
                   <small>
-                    $100/year
+                    ${Number(tiers.platinum || 0).toLocaleString()}/year
                     <br />
                     All benefits
                   </small>
@@ -223,7 +224,7 @@ export default function VipMembership() {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="+234 7000000"
+                  placeholder="+1 7034060"
                 />
               </div>
 
