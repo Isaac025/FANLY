@@ -24,8 +24,7 @@ export default function NotFound() {
             <Link to="/" className="primary">
               Back to Home
             </Link>
-
-            <Link to="/booking" className="outline-link">
+            <Link to="/book-celebrity" className="outline-link">
               Book Celebrity
             </Link>
           </div>
