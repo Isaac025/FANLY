@@ -77,7 +77,7 @@ const Counter = ({ value, suffix = "" }) => {
 const Home = () => {
   const navigate = useNavigate();
   return (
-    <main className="relative overflow-hidden bg-[#05070F] text-white">
+    <main className="relative overflow-hidden bg-[#05070F] text-white ">
       <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         <div className="absolute left-[-140px] top-[-180px] h-[560px] w-[560px] rounded-full bg-[#1E3A5F]/45 blur-[150px]" />
         <div className="absolute right-[-160px] top-[20%] h-[520px] w-[520px] rounded-full bg-[#4C3F91]/30 blur-[160px]" />

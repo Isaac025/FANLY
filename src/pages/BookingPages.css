@@ -829,3 +829,14 @@ button:disabled {
     text-align: center;
   }
 }
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(3) contrast(2);
+  opacity: 1;
+  cursor: pointer;
+}
+
+select option {
+  background: #0A1020;
+  color: #ffffff;
+}

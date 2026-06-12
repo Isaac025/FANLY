@@ -175,7 +175,8 @@ const Navbar = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -18, scale: 0.96 }}
             transition={{ duration: 0.35 }}
-            className="mx-auto mt-3 max-w-7xl overflow-hidden rounded-4xl border border-white/10 bg-[#05070F]/95 shadow-[0_30px_90px_rgba(0,0,0,0.55)] backdrop-blur-2xl lg:hidden"
+            className="mobile-menu-scroll mx-auto mt-3
+    max-w-7xl rounded-4xl border border-white/10 bg-[#05070F]/95 shadow-[0_30px_90px_rgba(0,0,0,0.55)] backdrop-blur-2xl lg:hidden max-h-[calc(100vh-100px)] overflow-y-auto overflow-x-hidden"
           >
             <div className="space-y-2 px-5 py-6">
               {isLoggedIn && (
