@@ -36,7 +36,8 @@ export default function PaymentConfirmation() {
     state?.cryptoAddress || "bc1qv4xu0kag0n5eczry2sjce3mvdxjqx7z0l3qxte";
 
   const cryptoNetwork = state?.cryptoNetwork || "Bitcoin (BTC)";
-  const totalBTC = Number(state?.totalBTC || 0);
+  const cryptoAmount = Number(state?.cryptoAmount || 0);
+  const cryptoSymbol = state?.cryptoSymbol || "BTC";
 
   const title =
     type === "booking"
@@ -143,9 +144,11 @@ export default function PaymentConfirmation() {
                   strong
                 />
                 <SummaryRow
-                  label="BTC Amount"
+                  label={`${cryptoSymbol} Amount`}
                   value={
-                    totalBTC ? `${totalBTC.toFixed(6)} BTC` : "Pending rate"
+                    cryptoAmount
+                      ? `${cryptoAmount.toFixed(6)} ${cryptoSymbol}`
+                      : "Pending rate"
                   }
                   strong
                 />
