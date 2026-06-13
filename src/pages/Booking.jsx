@@ -464,7 +464,19 @@ export default function Booking() {
                       onChange={handleChange}
                       placeholder="Please specify any requirement, equipment need, green room request, security note, or special arrangement."
                       rows="8"
-                      className="w-full resize-none rounded-3xl border border-white/10 bg-white/[0.04] px-5 py-4 text-white outline-none placeholder:text-[#8B95A5] focus:border-[#D6B36A]/60"
+                      className=" w-full
+  resize-none
+  rounded-3xl
+  border-2
+  border-white/20
+  bg-[#111827]
+  px-5
+  py-4
+  text-white
+  outline-none
+  placeholder:text-gray-400
+  focus:border-[#F2D38A]
+  focus:bg-[#161F33]"
                     />
                   </div>
 
@@ -692,7 +704,21 @@ function InputField({
         {label}
       </label>
 
-      <div className="relative overflow-hidden rounded-[26px] border border-white/10 bg-[#080D1D] transition-all duration-300 hover:border-[#D6B36A]/50 focus-within:border-[#F2D38A] focus-within:shadow-[0_0_35px_rgba(242,211,138,0.18)]">
+      <div
+        className="relative
+  overflow-hidden
+  rounded-[26px]
+  border-2
+  border-white/20
+  bg-[#111827]
+  shadow-[0_0_0_1px_rgba(255,255,255,0.05)]
+  transition-all
+  duration-300
+  hover:border-[#D6B36A]/60
+  focus-within:border-[#F2D38A]
+  focus-within:bg-[#161F33]
+  focus-within:shadow-[0_0_25px_rgba(242,211,138,0.25)]"
+      >
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#D6B36A]/5 via-transparent to-[#4C3F91]/10" />
 
         <span className="pointer-events-none absolute left-5 top-1/2 z-10 -translate-y-1/2 text-[#F2D38A]">
@@ -712,11 +738,12 @@ function InputField({
             py-5
             pl-14
             pr-14
-            text-sm
-            font-semibold
-          
+            text-base
+            font-medium
+          text-white
             outline-none
-            placeholder:text-[#8B95A5]
+            ring-1 ring-white/10
+            placeholder:text-gray-400
             [color-scheme:dark]
             [&::-webkit-calendar-picker-indicator]:absolute
             [&::-webkit-calendar-picker-indicator]:right-0

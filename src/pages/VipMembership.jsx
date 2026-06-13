@@ -505,7 +505,24 @@ export default function VipMembership() {
                         onChange={handleChange}
                         placeholder="Enter your full shipping address"
                         rows="5"
-                        className="w-full resize-none rounded-2xl border border-white/10 bg-black/25 px-5 py-4 text-white outline-none placeholder:text-[#8B95A5] focus:border-[#D6B36A]/60"
+                        className="
+  w-full
+  resize-none
+  rounded-2xl
+  border-2
+  border-white/20
+  bg-[#111827]
+  px-5
+  py-4
+  text-base
+  font-medium
+  text-white
+  outline-none
+  placeholder:text-gray-400
+  focus:border-[#F2D38A]
+  focus:bg-[#161F33]
+  focus:shadow-[0_0_25px_rgba(242,211,138,0.22)]
+"
                       />
                     </div>
 
@@ -795,7 +812,7 @@ function InputField({
       </label>
 
       <div className="relative">
-        <span className="absolute left-5 top-1/2 -translate-y-1/2 text-[#06B6D4]">
+        <span className="absolute left-5 top-1/2 -translate-y-1/2 text-[#F2D38A]">
           {icon}
         </span>
 
@@ -806,11 +823,12 @@ function InputField({
           onChange={onChange}
           placeholder={placeholder}
           autoComplete={name === "email" ? "email" : "off"}
-          className={`w-full rounded-2xl border bg-black/25 px-12 py-4 text-white outline-none placeholder:text-[#8B95A5] ${
-            error
-              ? "border-red-500 focus:border-red-500"
-              : "border-white/10 focus:border-[#D6B36A]/60"
-          }`}
+          className={`w-full rounded-2xl border-2 bg-[#111827] px-12 py-4 text-base font-medium text-white outline-none placeholder:text-gray-400 focus:bg-[#161F33] focus:shadow-[0_0_25px_rgba(242,211,138,0.22)]
+${
+  error
+    ? "border-red-500 focus:border-red-500"
+    : "border-white/20 focus:border-[#F2D38A]"
+}`}
         />
       </div>
     </div>
