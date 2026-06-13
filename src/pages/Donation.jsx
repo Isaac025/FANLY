@@ -344,7 +344,7 @@ export default function Donation() {
 
                     <div className="mb-7">
                       <label className="mb-3 block text-xs font-black uppercase tracking-[0.24em] text-[#F2D38A]">
-                        Choose donation amount
+                        Choose donation amount *
                       </label>
 
                       <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
@@ -394,7 +394,7 @@ export default function Donation() {
                           value={formData.amount}
                           onChange={handleChange}
                           min="1"
-                          className="w-full rounded-2xl border border-white/10 bg-black/25 px-10 py-4 text-white outline-none placeholder:text-[#8B95A5] focus:border-[#D6B36A]/60"
+                          className="w-full rounded-2xl border-2 border-white/20 bg-[#111827] px-10 py-4 text-base font-medium text-white outline-none placeholder:text-gray-400 focus:border-[#F2D38A] focus:bg-[#161F33] focus:shadow-[0_0_25px_rgba(242,211,138,0.22)]"
                         />
                       </div>
                     </div>
@@ -410,14 +410,14 @@ export default function Donation() {
                         onChange={handleChange}
                         placeholder="Write a kind message or dedication..."
                         rows="5"
-                        className="w-full resize-none rounded-2xl border border-white/10 bg-black/25 px-5 py-4 text-white outline-none placeholder:text-[#8B95A5] focus:border-[#D6B36A]/60"
+                        className="w-full resize-none rounded-2xl border-2 border-white/20 bg-[#111827] px-5 py-4 text-base font-medium text-white outline-none placeholder:text-gray-400 focus:border-[#F2D38A] focus:bg-[#161F33] focus:shadow-[0_0_25px_rgba(242,211,138,0.22)]"
                       />
                     </div>
 
                     <div className="grid gap-5 md:grid-cols-2">
                       <div>
                         <label className="mb-3 block text-xs font-black uppercase tracking-[0.24em] text-[#F2D38A]">
-                          First name
+                          First name *
                         </label>
 
                         <input
@@ -425,13 +425,13 @@ export default function Donation() {
                           value={formData.firstName}
                           onChange={handleChange}
                           placeholder="Your first name"
-                          className="w-full rounded-2xl border border-white/10 bg-black/25 px-5 py-4 text-white outline-none placeholder:text-[#8B95A5] focus:border-[#D6B36A]/60"
+                          className="w-full rounded-2xl border-2 border-white/20 bg-[#111827] px-5 py-4 text-base font-medium text-white outline-none placeholder:text-gray-400 focus:border-[#F2D38A] focus:bg-[#161F33] focus:shadow-[0_0_25px_rgba(242,211,138,0.22)]"
                         />
                       </div>
 
                       <div>
                         <label className="mb-3 block text-xs font-black uppercase tracking-[0.24em] text-[#F2D38A]">
-                          Email address
+                          Email address *
                         </label>
 
                         <>
@@ -442,12 +442,12 @@ export default function Donation() {
                             onChange={handleChange}
                             placeholder="Your email address"
                             autoComplete="email"
-                            className={`w-full rounded-2xl border bg-black/25 px-5 py-4 text-white outline-none placeholder:text-[#8B95A5]
-    ${
-      emailError
-        ? "border-red-500 focus:border-red-500"
-        : "border-white/10 focus:border-[#D6B36A]/60"
-    }`}
+                            className={`w-full rounded-2xl border-2 bg-[#111827] px-5 py-4 text-base font-medium text-white outline-none placeholder:text-gray-400 focus:bg-[#161F33] focus:shadow-[0_0_25px_rgba(242,211,138,0.22)]
+${
+  emailError
+    ? "border-red-500 focus:border-red-500"
+    : "border-white/20 focus:border-[#F2D38A]"
+}`}
                           />
 
                           {emailError && (
