@@ -377,6 +377,7 @@ export default function Booking() {
                       name="eventDate"
                       value={formData.eventDate}
                       onChange={handleChange}
+                      min={new Date().toISOString().split("T")[0]}
                     />
 
                     <InputField
@@ -683,6 +684,7 @@ function InputField({
   onChange,
   type = "text",
   placeholder = "",
+  min,
 }) {
   const inputId = `${name}-input`;
   const isDateOrTime = type === "date" || type === "time";
@@ -731,6 +733,7 @@ function InputField({
           value={value}
           onChange={onChange}
           placeholder={placeholder || label}
+          min={min}
           className="
             relative z-10
             w-full

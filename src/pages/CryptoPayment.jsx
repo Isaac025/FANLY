@@ -5,6 +5,8 @@ import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 import {
   FaBitcoin,
+  FaEthereum,
+  FaDollarSign,
   FaCopy,
   FaLock,
   FaShieldAlt,
@@ -19,8 +21,8 @@ import {
 export default function CryptoPayment() {
   const { state } = useLocation();
   const navigate = useNavigate();
-
-  const [btcRate, setBtcRate] = useState(0);
+  const [rates, setRates] = useState({});
+  const [selectedCrypto, setSelectedCrypto] = useState("btc");
   const [copied, setCopied] = useState(false);
 
   const booking = state?.booking;
@@ -28,9 +30,6 @@ export default function CryptoPayment() {
   const membership = state?.membership;
   const celebrity = state?.celebrity;
   const type = state?.type || "booking";
-
-  const cryptoAddress = "bc1qv4xu0kag0n5eczry2sjce3mvdxjqx7z0l3qxte";
-  const cryptoNetwork = "Bitcoin (BTC)";
 
   const celebrityName =
     celebrity?.name ||
@@ -61,14 +60,6 @@ export default function CryptoPayment() {
       amount + serviceFee,
   );
 
-  const totalBTC = btcRate ? total / btcRate : 0;
-
-  const qrData = `bitcoin:${cryptoAddress}?amount=${totalBTC.toFixed(6)}`;
-
-  const qrImage = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(
-    qrData,
-  )}`;
-
   const paymentType =
     type === "booking"
       ? "Booking Payment"
@@ -86,33 +77,76 @@ export default function CryptoPayment() {
     [celebrityName, paymentType, amount, serviceFee],
   );
 
+  const cryptoOptions = {
+    btc: {
+      name: "Bitcoin",
+      symbol: "BTC",
+      icon: <FaBitcoin />,
+      address: "bc1qv4xu0kag0n5eczry2sjce3mvdxjqx7z0l3qxte",
+      network: "Bitcoin Network",
+      coinGeckoId: "bitcoin",
+      color: "#F7931A",
+    },
+    eth: {
+      name: "Ethereum",
+      symbol: "ETH",
+      icon: <FaEthereum />,
+      address: "0xA3Fe75B61bb5590cD16433a15Aaa4aA9772d731C",
+      network: "Ethereum ERC20",
+      coinGeckoId: "ethereum",
+      color: "#627EEA",
+    },
+    usdt: {
+      name: "Tether",
+      symbol: "USDT",
+      icon: <FaDollarSign />,
+      address: "TLaU2JDTtHECpyMo37gVdXCo14by3sJcC3",
+      network: "USDT TRC20",
+      coinGeckoId: "tether",
+      color: "#26A17B",
+    },
+  };
+
+  const activeCrypto = cryptoOptions[selectedCrypto];
+  const cryptoRate = rates[selectedCrypto] || 0;
+  const cryptoAmount = cryptoRate ? total / cryptoRate : 0;
+
+  const cryptoAddress = activeCrypto.address;
+  const cryptoNetwork = activeCrypto.network;
+
+  const qrData = `${activeCrypto.symbol}:${cryptoAddress}?amount=${cryptoAmount.toFixed(6)}`;
+
+  const qrImage = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(
+    qrData,
+  )}`;
+
   useEffect(() => {
-    const fetchBTCPrice = async () => {
+    const fetchCryptoPrices = async () => {
       try {
         const res = await fetch(
-          "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd",
+          "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=usd",
         );
 
         const data = await res.json();
 
-        if (!data?.bitcoin?.usd) {
-          throw new Error("BTC rate unavailable");
-        }
-
-        setBtcRate(data.bitcoin.usd);
+        setRates({
+          btc: data?.bitcoin?.usd || 0,
+          eth: data?.ethereum?.usd || 0,
+          usdt: data?.tether?.usd || 1,
+        });
       } catch (error) {
-        toast.error("Could not fetch BTC rate");
+        toast.error("Could not fetch crypto rates");
       }
     };
 
-    fetchBTCPrice();
+    fetchCryptoPrices();
   }, []);
 
   const copyAddress = async () => {
     try {
       await navigator.clipboard.writeText(cryptoAddress);
       setCopied(true);
-      toast.success("BTC wallet address copied");
+      toast.success(" wallet address copied");
 
       setTimeout(() => setCopied(false), 2000);
     } catch (error) {
@@ -131,7 +165,8 @@ export default function CryptoPayment() {
         amount,
         serviceFee,
         total,
-        totalBTC,
+        cryptoAmount,
+        cryptoSymbol: activeCrypto.symbol,
         cryptoAddress,
         cryptoNetwork,
       },
@@ -151,8 +186,8 @@ export default function CryptoPayment() {
 
         <div className="relative mx-auto max-w-7xl">
           <FormHeader
-            title="Bitcoin Payment"
-            subtitle="Complete your payment carefully using the exact Bitcoin network and address below."
+            title={`${activeCrypto.name} Payment`}
+            subtitle={`Complete your payment carefully using the exact ${activeCrypto.network} address below.`}
             button="Secure Checkout"
           />
 
@@ -192,10 +227,37 @@ export default function CryptoPayment() {
                 </div>
               </div>
 
+              <div className="mb-6 grid gap-3 sm:grid-cols-3">
+                {Object.entries(cryptoOptions).map(([key, coin]) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setSelectedCrypto(key)}
+                    className={`rounded-2xl border p-4 text-left transition ${
+                      selectedCrypto === key
+                        ? "border-[#2563EB] bg-[#EFF6FF]"
+                        : "border-[#DDE3EE] bg-white hover:border-[#2563EB]/50"
+                    }`}
+                  >
+                    <div
+                      className="mb-3 text-2xl"
+                      style={{ color: coin.color }}
+                    >
+                      {coin.icon}
+                    </div>
+
+                    <h4 className="font-black text-[#0B1220]">{coin.symbol}</h4>
+                    <p className="text-xs font-bold text-[#64748B]">
+                      {coin.network}
+                    </p>
+                  </button>
+                ))}
+              </div>
+
               <div className="grid gap-6 xl:grid-cols-[320px_1fr]">
                 <div className="rounded-[28px] border border-[#DDE3EE] bg-[#F8FAFC] p-5 text-center">
                   <div className="mx-auto flex h-[280px] w-full max-w-[280px] items-center justify-center rounded-[24px] border border-[#DDE3EE] bg-white p-4">
-                    {btcRate ? (
+                    {cryptoRate ? (
                       <img
                         src={qrImage}
                         alt="Bitcoin payment QR code"
@@ -209,7 +271,7 @@ export default function CryptoPayment() {
                   </div>
 
                   <p className="mt-4 text-sm font-bold text-[#0B1220]">
-                    Scan to pay with Bitcoin
+                    Scan to pay with {activeCrypto.name}
                   </p>
 
                   <p className="mt-2 text-xs leading-6 text-[#64748B]">
@@ -227,7 +289,7 @@ export default function CryptoPayment() {
 
                   <div className="rounded-[24px] border border-[#DDE3EE] bg-white p-5">
                     <label className="mb-3 block text-xs font-black uppercase tracking-[0.22em] text-[#64748B]">
-                      BTC Wallet Address
+                      {activeCrypto.symbol} Wallet Address
                     </label>
 
                     <div className="flex flex-col gap-3 rounded-2xl border border-[#DDE3EE] bg-[#F8FAFC] p-4 sm:flex-row sm:items-center">
@@ -254,9 +316,9 @@ export default function CryptoPayment() {
                           Important payment warning
                         </h4>
                         <p className="mt-2 text-sm leading-6 text-[#92400E]">
-                          Send only Bitcoin through the Bitcoin network. Sending
-                          another coin or using a wrong network may result in
-                          permanent loss of funds.
+                          Send only {activeCrypto.symbol} through the{" "}
+                          {activeCrypto.network}. Sending another coin or using
+                          a wrong network may result in permanent loss of funds.
                         </p>
                       </div>
                     </div>
@@ -309,18 +371,22 @@ export default function CryptoPayment() {
                 />
 
                 <SummaryRow
-                  label="Total BTC"
-                  value={btcRate ? `${totalBTC.toFixed(6)} BTC` : "Loading..."}
+                  label={`Total ${activeCrypto.symbol}`}
+                  value={
+                    cryptoRate
+                      ? `${cryptoAmount.toFixed(6)}  ${activeCrypto.symbol}`
+                      : "Loading..."
+                  }
                   strong
                 />
 
                 <div className="mt-5 rounded-2xl border border-[#DDE3EE] bg-[#F8FAFC] p-4">
                   <p className="text-xs font-bold uppercase tracking-widest text-[#64748B]">
-                    BTC Rate
+                    ${activeCrypto.symbol} Rate
                   </p>
                   <p className="mt-1 text-lg font-black text-[#0B1220]">
-                    {btcRate
-                      ? `$${btcRate.toLocaleString()} / BTC`
+                    {cryptoRate
+                      ? `$${cryptoRate.toLocaleString()} / ${activeCrypto.symbol}`
                       : "Loading..."}
                   </p>
                 </div>
