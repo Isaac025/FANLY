@@ -96,14 +96,28 @@ export default function Booking() {
 
     if (step < 2) {
       setStep((prev) => prev + 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      setTimeout(() => {
+        const firstField = document.querySelector("input, textarea, select");
+
+        firstField?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 100);
     }
   };
 
   const prevStep = () => {
     if (step > 0) {
       setStep((prev) => prev - 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      setTimeout(() => {
+        const firstField = document.querySelector("input, textarea, select");
+
+        firstField?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 100);
     }
   };
 
@@ -469,7 +483,7 @@ export default function Booking() {
   resize-none
   rounded-3xl
   border-2
-  border-white/20
+  border-white
   bg-[#111827]
   px-5
   py-4
@@ -711,8 +725,7 @@ function InputField({
   overflow-hidden
   rounded-[26px]
   border-2
-  border-white/20
-  bg-[#111827]
+border-white
   shadow-[0_0_0_1px_rgba(255,255,255,0.05)]
   transition-all
   duration-300
