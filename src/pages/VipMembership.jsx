@@ -202,14 +202,28 @@ export default function VipMembership() {
 
     if (step < 2) {
       setStep((prev) => prev + 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      setTimeout(() => {
+        const firstField = document.querySelector("input, textarea, select");
+
+        firstField?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 100);
     }
   };
 
   const prevStep = () => {
     if (step > 0) {
       setStep((prev) => prev - 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      setTimeout(() => {
+        const firstField = document.querySelector("input, textarea, select");
+
+        firstField?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 100);
     }
   };
 
@@ -510,7 +524,7 @@ export default function VipMembership() {
   resize-none
   rounded-2xl
   border-2
-  border-white/20
+  border-white
   bg-[#111827]
   px-5
   py-4
@@ -518,10 +532,11 @@ export default function VipMembership() {
   font-medium
   text-white
   outline-none
-  placeholder:text-gray-400
+  placeholder:text-gray-300
   focus:border-[#F2D38A]
   focus:bg-[#161F33]
   focus:shadow-[0_0_25px_rgba(242,211,138,0.22)]
+  ring-1 ring-white/20
 "
                       />
                     </div>
@@ -827,7 +842,7 @@ function InputField({
 ${
   error
     ? "border-red-500 focus:border-red-500"
-    : "border-white/20 focus:border-[#F2D38A]"
+    : "border-white focus:border-[#F2D38A]"
 }`}
         />
       </div>

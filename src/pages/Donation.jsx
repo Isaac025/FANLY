@@ -158,17 +158,29 @@ export default function Donation() {
 
     if (step < 2) {
       setStep((prev) => prev + 1);
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
+
+      setTimeout(() => {
+        const firstField = document.querySelector("input, textarea, select");
+
+        firstField?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 100);
     }
   };
 
   const prevStep = () => {
     if (step > 0) {
       setStep((prev) => prev - 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      setTimeout(() => {
+        const firstField = document.querySelector("input, textarea, select");
+
+        firstField?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 100);
     }
   };
 
@@ -394,7 +406,7 @@ export default function Donation() {
                           value={formData.amount}
                           onChange={handleChange}
                           min="1"
-                          className="w-full rounded-2xl border-2 border-white/20 bg-[#111827] px-10 py-4 text-base font-medium text-white outline-none placeholder:text-gray-400 focus:border-[#F2D38A] focus:bg-[#161F33] focus:shadow-[0_0_25px_rgba(242,211,138,0.22)]"
+                          className="w-full rounded-2xl border-2 border-white bg-[#111827] px-10 py-4 text-base font-medium text-white outline-none placeholder:text-gray-400 focus:border-[#F2D38A] focus:bg-[#161F33] focus:shadow-[0_0_25px_rgba(242,211,138,0.22)]"
                         />
                       </div>
                     </div>
@@ -410,7 +422,7 @@ export default function Donation() {
                         onChange={handleChange}
                         placeholder="Write a kind message or dedication..."
                         rows="5"
-                        className="w-full resize-none rounded-2xl border-2 border-white/20 bg-[#111827] px-5 py-4 text-base font-medium text-white outline-none placeholder:text-gray-400 focus:border-[#F2D38A] focus:bg-[#161F33] focus:shadow-[0_0_25px_rgba(242,211,138,0.22)]"
+                        className="w-full resize-none rounded-2xl border-2 border-white bg-[#111827] px-5 py-4 text-base font-medium text-white outline-none placeholder:text-gray-400 focus:border-[#F2D38A] focus:bg-[#161F33] focus:shadow-[0_0_25px_rgba(242,211,138,0.22)]"
                       />
                     </div>
 
@@ -425,7 +437,7 @@ export default function Donation() {
                           value={formData.firstName}
                           onChange={handleChange}
                           placeholder="Your first name"
-                          className="w-full rounded-2xl border-2 border-white/20 bg-[#111827] px-5 py-4 text-base font-medium text-white outline-none placeholder:text-gray-400 focus:border-[#F2D38A] focus:bg-[#161F33] focus:shadow-[0_0_25px_rgba(242,211,138,0.22)]"
+                          className="w-full rounded-2xl border-2 border-white bg-[#111827] px-5 py-4 text-base font-medium text-white outline-none placeholder:text-gray-400 focus:border-[#F2D38A] focus:bg-[#161F33] focus:shadow-[0_0_25px_rgba(242,211,138,0.22)]"
                         />
                       </div>
 
@@ -446,7 +458,7 @@ export default function Donation() {
 ${
   emailError
     ? "border-red-500 focus:border-red-500"
-    : "border-white/20 focus:border-[#F2D38A]"
+    : "border-white focus:border-[#F2D38A]"
 }`}
                           />
 
