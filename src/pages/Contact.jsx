@@ -18,7 +18,7 @@ import Footer from "../components/Footer";
 
 const FORM_ENDPOINT = "https://formspree.io/f/xzdqaqdw";
 
-const EMAIL = "info@yourorg.com";
+const EMAIL = "support@fanlycelebrity.com";
 const PHONE_1 = "+13362552553";
 const DISPLAY_PHONE = "+1 440 723 1413";
 const ADDRESS = "1243 N Highland Ave, Hollywood, CA 90038";
@@ -35,7 +35,7 @@ const contactCards = [
     title: "Email Us",
     text: "Send us a mail anytime. We’ll get back within 24 hours.",
     value: EMAIL,
-    href: `https://mail.google.com/mail/?view=cm&fs=1&to=${EMAIL}`,
+    href: `mailto:${EMAIL}`,
     action: "Open Mail",
     external: true,
   },
@@ -175,7 +175,7 @@ const Contact = () => {
 
                 <div className="mt-9 flex flex-wrap gap-4">
                   <a
-                    href={`https://mail.google.com/mail/?view=cm&fs=1&to=${EMAIL}`}
+                    href={`mailto:${EMAIL}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-[#D6B36A] via-[#F2D38A] to-[#C7A76C] px-7 py-4 text-sm font-black uppercase tracking-widest text-[#05070F] shadow-[0_0_45px_rgba(214,179,106,0.35)] transition hover:scale-105"
