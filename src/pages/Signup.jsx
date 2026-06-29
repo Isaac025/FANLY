@@ -35,6 +35,7 @@ const countries = [
   { name: "Italy", code: "+39" },
   { name: "Spain", code: "+34" },
   { name: "Netherlands", code: "+31" },
+  { name: "Portugal", code: "+351" },
   { name: "Belgium", code: "+32" },
   { name: "Switzerland", code: "+41" },
   { name: "Ireland", code: "+353" },
