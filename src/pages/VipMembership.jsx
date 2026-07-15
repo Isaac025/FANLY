@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { Country } from "country-state-city";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AnimatePresence, motion } from "framer-motion";
@@ -34,6 +35,12 @@ import {
 } from "./BookingShared";
 
 import { useAppContext } from "../context/AppContext";
+
+const countries = Country.getAllCountries().map((country) => ({
+  name: country.name,
+  code: `+${country.phonecode}`,
+  isoCode: country.isoCode,
+}));
 
 const processingFee = 5.56;
 
@@ -120,6 +127,7 @@ export default function VipMembership() {
   const [formData, setFormData] = useState({
     tier: "standard",
     fullName: "",
+    countryCode: "+1",
     phone: "",
     email: "",
     streetAddress: "",
@@ -138,6 +146,7 @@ export default function VipMembership() {
     const fields = [
       formData.tier,
       formData.fullName,
+      formData.countryCode,
       formData.phone,
       formData.email,
       formData.streetAddress,
@@ -244,7 +253,7 @@ export default function VipMembership() {
       celebrityId: selectedCelebrity._id,
       celebrityName,
       fullName: formData.fullName,
-      phone: formData.phone,
+      phone: `${formData.countryCode}${formData.phone}`,
       email: formData.email,
       streetAddress: formData.streetAddress,
       shippingAddress: formData.shippingAddress,
@@ -417,13 +426,10 @@ export default function VipMembership() {
                         placeholder="Enter your full name"
                       />
 
-                      <InputField
-                        icon={<FaPhoneAlt />}
-                        label="Phone number"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        placeholder="+1 703 4060"
+                      <PhoneNumberField
+                        countries={countries}
+                        formData={formData}
+                        setFormData={setFormData}
                       />
 
                       <div>
@@ -786,6 +792,58 @@ export default function VipMembership() {
 
       <HelpCTA />
       <PageFooter />
+    </div>
+  );
+}
+
+function PhoneNumberField({ countries, formData, setFormData }) {
+  return (
+    <div>
+      <label className="mb-3 block text-xs font-black uppercase tracking-[0.24em] text-[#F2D38A]">
+        Phone Number
+      </label>
+
+      <div className="grid grid-cols-[180px_1fr] gap-3">
+        <select
+          value={formData.countryCode}
+          onChange={(e) =>
+            setFormData((prev) => ({
+              ...prev,
+              countryCode: e.target.value,
+            }))
+          }
+          className="rounded-2xl border-2 border-white bg-[#111827] px-4 py-4 text-white outline-none focus:border-[#F2D38A] focus:bg-[#161F33]"
+        >
+          {countries.map((country) => (
+            <option
+              key={country.isoCode}
+              value={country.code}
+              className="bg-[#111827]"
+            >
+              {country.name} ({country.code})
+            </option>
+          ))}
+        </select>
+
+        <div className="relative">
+          <span className="absolute left-5 top-1/2 -translate-y-1/2 text-[#F2D38A]">
+            <FaPhoneAlt />
+          </span>
+
+          <input
+            type="tel"
+            value={formData.phone}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                phone: e.target.value,
+              }))
+            }
+            placeholder="Enter phone number"
+            className="w-full rounded-2xl border-2 border-white bg-[#111827] px-12 py-4 text-white outline-none placeholder:text-gray-400 focus:border-[#F2D38A] focus:bg-[#161F33] focus:shadow-[0_0_25px_rgba(242,211,138,0.22)]"
+          />
+        </div>
+      </div>
     </div>
   );
 }
