@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Country } from "country-state-city";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -24,32 +25,38 @@ import { GoogleLogin } from "@react-oauth/google";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
 
-const countries = [
-  { name: "United States", code: "+1" },
-  { name: "United Kingdom", code: "+44" },
-  { name: "Nigeria", code: "+234" },
-  { name: "Canada", code: "+1" },
-  { name: "Australia", code: "+61" },
-  { name: "Germany", code: "+49" },
-  { name: "France", code: "+33" },
-  { name: "Italy", code: "+39" },
-  { name: "Spain", code: "+34" },
-  { name: "Netherlands", code: "+31" },
-  { name: "Portugal", code: "+351" },
-  { name: "Belgium", code: "+32" },
-  { name: "Switzerland", code: "+41" },
-  { name: "Ireland", code: "+353" },
-  { name: "South Africa", code: "+27" },
-  { name: "Ghana", code: "+233" },
-  { name: "Kenya", code: "+254" },
-  { name: "India", code: "+91" },
-  { name: "China", code: "+86" },
-  { name: "Japan", code: "+81" },
-  { name: "Brazil", code: "+55" },
-  { name: "Mexico", code: "+52" },
-  { name: "United Arab Emirates", code: "+971" },
-  { name: "Saudi Arabia", code: "+966" },
-];
+const countries = Country.getAllCountries().map((country) => ({
+  name: country.name,
+  code: `+${country.phonecode}`,
+  isoCode: country.isoCode,
+}));
+
+// const countries = [
+//   { name: "United States", code: "+1" },
+//   { name: "United Kingdom", code: "+44" },
+//   { name: "Nigeria", code: "+234" },
+//   { name: "Canada", code: "+1" },
+//   { name: "Australia", code: "+61" },
+//   { name: "Germany", code: "+49" },
+//   { name: "France", code: "+33" },
+//   { name: "Italy", code: "+39" },
+//   { name: "Spain", code: "+34" },
+//   { name: "Netherlands", code: "+31" },
+//   { name: "Portugal", code: "+351" },
+//   { name: "Belgium", code: "+32" },
+//   { name: "Switzerland", code: "+41" },
+//   { name: "Ireland", code: "+353" },
+//   { name: "South Africa", code: "+27" },
+//   { name: "Ghana", code: "+233" },
+//   { name: "Kenya", code: "+254" },
+//   { name: "India", code: "+91" },
+//   { name: "China", code: "+86" },
+//   { name: "Japan", code: "+81" },
+//   { name: "Brazil", code: "+55" },
+//   { name: "Mexico", code: "+52" },
+//   { name: "United Arab Emirates", code: "+971" },
+//   { name: "Saudi Arabia", code: "+966" },
+// ];
 
 const signupSchema = yup.object().shape({
   fullName: yup.string().required("Full name is required"),
@@ -428,11 +435,11 @@ function PhoneField({ register, errors, countries }) {
         >
           {countries.map((country) => (
             <option
-              key={`${country.name}-${country.code}`}
+              key={country.isoCode}
               value={country.code}
               className="bg-[#05070F] text-white"
             >
-              {country.code}
+              {country.name} ({country.code})
             </option>
           ))}
         </select>
@@ -490,7 +497,7 @@ function CountryField({ register, errors, countries, onCountryChange }) {
 
           {countries.map((country) => (
             <option
-              key={country.name}
+              key={country.isoCode}
               value={country.name}
               className="bg-[#05070F] text-white"
             >
