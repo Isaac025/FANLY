@@ -26,12 +26,11 @@ import UserVipMemberships from "./pages/UserVipMemberships";
 import Profile from "./pages/Profile";
 import AdminLogin from "./admin/AdminLogin";
 import PaymentConfirmation from "./pages/PaymentConfirmation";
-import ChatWidget from "./components/ChatWidget";
-import AdminChats from "./admin/AdminChats";
-import AdminChatDetails from "./admin/AdminChatDetails";
+// import AdminChats from "./admin/AdminChats";
+// import AdminChatDetails from "./admin/AdminChatDetails";
 import BackToTop from "./components/BackToTop";
 import ScrollToTop from "./components/ScrollToTop";
-
+import Smartsupp from "./components/Smartsupp";
 
 function App() {
   const location = useLocation();
@@ -135,13 +134,13 @@ function App() {
           <Route path="bookings" element={<AdminBookings />} />
           <Route path="donations" element={<AdminDonations />} />
           <Route path="vip-memberships" element={<AdminVipMemberships />} />
-          <Route path="chats" element={<AdminChats />} />
-          <Route path="chats/:id" element={<AdminChatDetails />} />
+          {/* <Route path="chats" element={<AdminChats />} /> */}
+          {/* <Route path="chats/:id" element={<AdminChatDetails />} /> */}
         </Route>
         <Route path="/payment" element={<CryptoPayment />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {!isAdminPage && <ChatWidget />}
+      {!isAdminPage && <Smartsupp />}
       <BackToTop />
     </div>
   );

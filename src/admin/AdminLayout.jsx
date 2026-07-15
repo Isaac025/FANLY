@@ -21,7 +21,7 @@ export default function AdminLayout() {
     ["Bookings", "/admin/bookings"],
     ["Donations", "/admin/donations"],
     ["VIP Memberships", "/admin/vip-memberships"],
-    ["Chats", "/admin/chats"],
+    // ["Chats", "/admin/chats"],
   ];
 
   return (

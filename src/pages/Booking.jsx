@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { Country } from "country-state-city";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { HelpCTA, PageFooter } from "./BookingShared";
@@ -22,6 +23,12 @@ import {
   FaVenusMars,
 } from "react-icons/fa";
 
+const countries = Country.getAllCountries().map((country) => ({
+  name: country.name,
+  code: `+${country.phonecode}`,
+  isoCode: country.isoCode,
+}));
+
 const serviceFee = 5.56;
 
 const steps = ["Event Details", "Requirements", "Payment"];
@@ -37,6 +44,7 @@ export default function Booking() {
 
   const [formData, setFormData] = useState({
     fullName: "",
+    countryCode: "+1",
     phone: "",
     email: "",
     eventDate: "",
@@ -138,7 +146,7 @@ export default function Booking() {
       celebrityName: selectedCelebrity.name,
 
       fullName: formData.fullName,
-      phone: formData.phone,
+      phone: `${formData.countryCode}${formData.phone}`,
       email: formData.email,
       gender: formData.gender,
 
@@ -168,6 +176,57 @@ export default function Booking() {
       });
     }
   };
+
+  function PhoneField({ countries, formData, setFormData }) {
+    return (
+      <div>
+        <label className="mb-3 block text-xs font-black uppercase tracking-[0.22em] text-[#F2D38A]">
+          Phone Number
+        </label>
+
+        <div className="grid grid-cols-[170px_1fr] gap-3">
+          <select
+            value={formData.countryCode}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                countryCode: e.target.value,
+              }))
+            }
+            className="rounded-[24px] border border-white/10 bg-[#0A1020] px-4 py-5 text-white outline-none"
+          >
+            {countries.map((country) => (
+              <option
+                key={country.isoCode}
+                value={country.code}
+                className="bg-[#0A1020]"
+              >
+                {country.name} ({country.code})
+              </option>
+            ))}
+          </select>
+
+          <div className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[#0A1020]">
+            <span className="absolute left-5 top-1/2 -translate-y-1/2 text-[#F2D38A]">
+              <FaPhoneAlt />
+            </span>
+
+            <input
+              value={formData.phone}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  phone: e.target.value,
+                }))
+              }
+              placeholder="Phone number"
+              className="w-full bg-transparent py-5 pl-14 pr-5 text-white outline-none"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen overflow-hidden bg-[#05070F] text-white">
@@ -364,13 +423,10 @@ export default function Booking() {
                       placeholder="Your full name"
                     />
 
-                    <InputField
-                      icon={<FaPhoneAlt />}
-                      label="Phone number"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      placeholder="+1 70376000"
+                    <PhoneField
+                      countries={countries}
+                      formData={formData}
+                      setFormData={setFormData}
                     />
 
                     <InputField
